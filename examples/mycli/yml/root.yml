@@ -1,0 +1,3 @@
+root:
+  name: mycli
+  script_dir: scripts

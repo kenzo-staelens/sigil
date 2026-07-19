@@ -1,0 +1,34 @@
+calc:
+  name: calc
+  parent: root
+  help: "simple calculator example"
+  args:
+    - name: ["-v", "--verbose"]
+      action: store_true
+      help: "enable verbose mode"
+
+calc_add:
+  name: add
+  parent: calc
+  help: "add two numbers"
+  script: calc_add
+  args:
+    - name: "a"
+      type: float
+      help: "first number"
+    - name: "b"
+      type: float
+      help: "second number"
+
+calc_mul:
+  name: mul
+  parent: calc
+  help: "multiply two numbers"
+  script: calc_mul
+  args:
+    - name: "a"
+      type: float
+      help: "first number"
+    - name: "b"
+      type: float
+      help: "second number"

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sigil-cli"
+version = "0.1.0"
+description = "Configuration driven CLI builder with subcommands and script loading"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Kenzo Staelens", email = "kenzostael@gmail.com"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+completion = ["argcomplete>=3.0"]
+dev = ["pytest", "pytest-cov", "ruff"]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/sigil"
+Repository = "https://github.com/yourusername/sigil"
+Issues = "https://github.com/yourusername/sigil/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]

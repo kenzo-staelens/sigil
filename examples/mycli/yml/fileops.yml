@@ -1,0 +1,28 @@
+fileops:
+  name: fileops
+  parent: root
+  help: "file and folder operations"
+  script: fileops
+  args:
+    - name: ["-d", "--directory"]
+      default: "."
+      help: "target directory"
+
+fileops_list:
+  name: list
+  parent: fileops
+  help: "list files in directory"
+  script: fileops_list
+  args:
+    - name: ["-l", "--long"]
+      action: store_true
+      help: "show detailed listing"
+
+fileops_count:
+  name: count
+  parent: fileops
+  help: "count files in directory"
+  script: fileops_count
+  args:
+    - name: ["-e", "--extension"]
+      help: "filter by extension (e.g., .py)"
