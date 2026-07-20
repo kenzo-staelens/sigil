@@ -2,10 +2,15 @@
 root:
   name: helloworld
   script: root
-  scriptdir: scripts
+  script_dir: scripts
   args:
-    - name:
-        - '--verbose'
-        - '-v'
+    - name: name
+      help: your name
+    - name: --shout
       action: store_true
-      help: verbose helloworld
+      help: Increase volume
+    - name:
+        - --verbose
+        - -v
+      action: store_true
+      help: increase verbosity
