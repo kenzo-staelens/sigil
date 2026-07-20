@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
 YML_ROOT = """
 root:
-  name: testproject
+  name: {}
   script: root
   script_dir: scripts
   args:
