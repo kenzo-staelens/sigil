@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kenzo-staelens/sigil/refs/heads/main/schemas/command.schema.json
+root:
+  name: helloworld
+  script: root
+  scriptdir: scripts
+  args:
+    - name:
+        - '--verbose'
+        - '-v'
+      action: store_true
+      help: verbose helloworld
