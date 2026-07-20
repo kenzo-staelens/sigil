@@ -8,6 +8,5 @@ __all__ = [
     ArgumentGroup,
     LibArgParser,
     ParserConfig,
-    ParserConfig,
     SubcommandModule
 ]

@@ -19,7 +19,7 @@ def run_from_config(config_root: str, loader_class = YamlReader):
                 resolved.script_dir,
                 script
             )
-        except Exception as e:
-            print(f'failed to load script "{script}"\n\t{e}')
+        except FileNotFoundError as e:
+            print(f'failed to load script "{script}"\n  {e}')
             return
         module.run(args, execution_context)
