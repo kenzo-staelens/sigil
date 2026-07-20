@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kenzo-staelens/sigil/refs/heads/main/schemas/manifest.schema.json
 - yml/root.yml
 - yml/calc.yml
 - yml/fileops.yml

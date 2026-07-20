@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Sigil command definition",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/definitions/command_definition"
+  },
+  "definitions": {
+    "arg_item": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "argument",
+            "group",
+            "mutex"
+          ],
+          "default": "argument"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "kind": {
+              "enum": [
+                "argument"
+              ]
+            },
+            "args": false
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "enum": [
+                "group",
+                "mutex"
+              ]
+            },
+            "args": {
+              "minItems": 1
+            }
+          },
+          "required": [
+            "args"
+          ]
+        }
+      ],
+      "additionalProperties": true
+    },
+    "command_definition": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "help": {
+          "type": "string"
+        },
+        "script": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/arg_item"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": true
+    }
+  }
+}
