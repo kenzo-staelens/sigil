@@ -58,7 +58,7 @@ def create_project(project_name: str, target_dir: str = "."):
 
     if base_path.exists():
         print(f"project '{base_path}' already exists. aborting.")
-        sys.exit()
+        sys.exit(0)
 
     # 1. Create directories
     yml_path.mkdir(parents=True, exist_ok=False)

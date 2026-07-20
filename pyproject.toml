@@ -39,3 +39,8 @@ sigil = "sigil.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.coverage.run]
+omit = [
+    "src/sigil/__main__.py"
+]
