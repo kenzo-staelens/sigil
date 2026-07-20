@@ -24,9 +24,9 @@ completion = ["argcomplete>=3.0"]
 dev = ["pytest", "pytest-cov", "ruff"]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/sigil"
-Repository = "https://github.com/yourusername/sigil"
-Issues = "https://github.com/yourusername/sigil/issues"
+Homepage = "https://github.com/kenzo-staelens/sigil"
+Repository = "https://github.com/kenzo-staelens/sigil"
+Issues = "https://github.com/kenzo-staelens/sigil/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

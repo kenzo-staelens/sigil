@@ -179,7 +179,7 @@ Both literal string and list of strings are supported.
 
 ## Tab‑Completion (argcomplete)
 
-Argus registers itself with `argcomplete` automatically if available on your system.  
+Sigil registers itself with `argcomplete` automatically if available on your system.  
 To enable completion, install [argcomplete](https://github.com/kislyuk/argcomplete) and activate it for your entry script:
 
 ```bash
