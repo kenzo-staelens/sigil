@@ -5,6 +5,10 @@
 Sigil is a lightweight, declarative CLI framework for Python. Define your command tree in YAML (or any other format), and sigil builds the `argparse` parser on the fly. Complete with subcommands and dynamic script loading.  
 It plays nicely with `argcomplete` out of the box.
 
+[![pypi](https://badge.fury.io/py/sigil-cli.svg)](https://pypi.python.org/pypi/sigil-cli)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ---
 
 ## Features
@@ -137,6 +141,9 @@ chmod +x mycli.py
 | `script` | Python module name (without `.py`) inside `script_dir` or as absolute path |
 | `args` | List of argument definitions (see below) |
 | `default` | If `true`, this subcommand is used when no subcommand is given |
+| any other parser kwarg | except for `dest` and `formatter_class` they are all supported |
+
+Note that `parent` does not refer to argparse's parent parameter but is only used to resolve the parser tree. Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `this` command's parents in the tree.
 
 ### Argument
 
@@ -147,6 +154,20 @@ Each argument entry can be a plain dict which maps 1-to-1 with argparse `add_arg
   required: false
   default: 8069
   help: "port number"
+```
+
+Groups and mutex groups are also suppored via the "kind" parameter (defaults to `argument`)
+
+```yaml
+# mutex group
+- kind: mutex
+  args:
+    - <any recursive args/group/mutex construct here>
+    ...
+  ... # any valid mutex group arguments go here
+
+- kind: group
+  ...  # same
 ```
 
 The `name` field can be `--flag` for flags or a string for positional arguments.

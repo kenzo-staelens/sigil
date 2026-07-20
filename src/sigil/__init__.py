@@ -1,6 +1,7 @@
 from .entrypoint import run_from_config
 from .models import (
     Argument,
+    ArgumentGroup,
     LibArgParser,
     ParserConfig,
     SubcommandModule,
@@ -15,6 +16,7 @@ from .stages import (
 __all__ = (
     run_from_config,
     Argument,
+    ArgumentGroup,
     LibArgParser,
     ParserConfig,
     SubcommandModule,

@@ -1,4 +1,4 @@
-from sigil.models import Argument, LibArgParser, ParserConfig
+from sigil.models import Argument, ArgumentGroup, LibArgParser, ParserConfig
 
 try:
     import argcomplete
@@ -25,9 +25,11 @@ class Builder:
             )
             last_default = None  # find the last default
             for _, subcommand in parser_data.subparsers.items():
-                subcommand_name = subcommand.name
-                subcmd_help = subcommand.help
-                argparser = argparse_group.add_parser(subcommand_name, help=subcmd_help)
+                argparser = argparse_group.add_parser(
+                    subcommand.name,
+                    help=subcommand.help,
+                    **subcommand.parser_kwargs,
+                )
                 for arg in subcommand.args:
                     cls.attach_argument(argparser, arg)
                 if subcommand.default:
@@ -46,8 +48,12 @@ class Builder:
     def attach_argument(
         cls,
         parser: LibArgParser,
-        argument_config: Argument
+        argument_config: Argument | ArgumentGroup
     ) -> None:
+        if isinstance(argument_config, ArgumentGroup):
+            cls.attach_argumentgroup(parser, argument_config)
+            return
+
         conditional_args: dict[str, Any] = {}
         if any(x.startswith('-') for x in argument_config.name):
             # if no '--name' or '-n' exists it's required by default
@@ -57,17 +63,35 @@ class Builder:
             *argument_config.name,
             help=argument_config.help,
             action=argument_config.action,
-            default=argument_config.default,
             **(argument_config.kw | conditional_args)
         )
+
+    @classmethod
+    def attach_argumentgroup(
+        cls,
+        parser: LibArgParser,
+        argument_config: ArgumentGroup
+    ):
+        if argument_config.mutex:
+            group_method = parser.add_mutually_exclusive_group
+        else:
+            group_method = parser.add_argument_group
+        grp = group_method(**argument_config.kw)
+        for arg in argument_config.args:
+            # for all intents and purposes in attach_argument(group)
+            # a group has the same interface used in these methods
+            # as a parser has; we can thus assume group is a parser
+            cls.attach_argument(grp, arg)
 
     @classmethod
     def build(
         cls,
         root_data: ParserConfig
     ) -> LibArgParser:
-        root_name = root_data.name
-        root_parser = LibArgParser(prog=root_name)
+        root_parser = LibArgParser(
+            root_data.name,
+            **root_data.parser_kwargs,
+        )
         for arg in root_data.args or []:
             cls.attach_argument(root_parser, arg)
 
