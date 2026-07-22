@@ -42,5 +42,7 @@ where = ["src"]
 
 [tool.coverage.run]
 omit = [
-    "src/sigil/__main__.py"
+    "src/sigil/__main__.py",
+    "tests/*",
+    "*/scripts/*"
 ]

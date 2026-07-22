@@ -1,4 +1,5 @@
 import logging
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -14,8 +15,8 @@ class YamlReader:
     @classmethod
     def handle_duplicates(
         cls,
-        loaded_entry: dict[str],
-        loaded_config: dict[str],
+        loaded_entry: dict[str, Any],
+        loaded_config: dict[str, Any],
         entry: str
     ):
         # warning: in place mutation if you decide to make changes to loaded config
@@ -31,17 +32,22 @@ class YamlReader:
     ) -> dict[str, ParserConfig]:
         config_root_path = Path(config_root)
         manifest = cls.read_file(config_root_path/manifest_file)
+        if not manifest:
+            _logger.critical("could not load manifest, aborting")
+            sys.exit(1)
         loaded_config = {}
 
         for entry in manifest:
             loaded_entry = cls.read_file(config_root_path/entry)
             if not loaded_entry:
                 continue
-            loaded_entry = {
-                k:v
-                for k, v in loaded_entry.items()
-                if not v.get('load_ignore')
-            }
+            tmp = {}
+            for k, v in loaded_entry.items():
+                if v.get('load_ignore'):
+                    _logger.warning(f'{k} marked as load_ignore, skipping')
+                    continue
+                tmp[k] = v  # pesky can't del in for loop :/
+            loaded_entry = tmp
             cls.handle_duplicates(loaded_entry, loaded_config, entry)
             cls.convert_args(loaded_entry)
             # override loaded entry duplicates by already found
@@ -50,15 +56,14 @@ class YamlReader:
         for k, v in loaded_config.items():
             try:
                 loaded_config[k] = ParserConfig.factory(**v)
-            except Exception:
-                _logger.error(f'failed to parse config {k}, ignoring')
+            except Exception as e:
+                _logger.error(f'failed to parse config {k}, ignoring\n{e}')
         # pesky "dictionary changed size during iteration"
         loaded_config = {
             k: v
             for k,v in loaded_config.items()
             if isinstance(v, ParserConfig)
         }
-
         return loaded_config
 
     @classmethod
@@ -77,10 +82,10 @@ class YamlReader:
 
     # actual IO, also adaptable
     @classmethod
-    def read_file(cls, filename) -> dict:
+    def read_file(cls, filename) -> dict | None:
         try:
             with open(filename) as f:
                 return yaml.load(f.read(), Loader=yaml.SafeLoader)
         except FileNotFoundError:
             _logger.error(f'failed to load file {filename}, skipping')
-            return None
+            return

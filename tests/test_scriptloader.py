@@ -37,7 +37,6 @@ def test_script_loader_import_module(tmp_path):
     assert hasattr(module, "run")
     assert callable(module.run)
 
-
 @patch("sigil.stages.script_loader.importlib.util")
 def test_script_loader_import_module_mock(mock_importlib, tmp_path):
     """Test import_module with mocked importlib to avoid actual file I/O."""

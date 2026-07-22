@@ -5,7 +5,7 @@
 Sigil is a lightweight, declarative CLI framework for Python. Define your command tree in YAML (or any other format), and sigil builds the `argparse` parser on the fly. Complete with subcommands and dynamic script loading.  
 It plays nicely with `argcomplete` out of the box.
 
-[![pypi](https://badge.fury.io/py/sigil-cli.svg)](https://pypi.python.org/pypi/sigil-cli)
+[![PyPI Version](https://img.shields.io/pypi/v/sigil-cli)](https://pypi.python.org/pypi/sigil-cli)
 [![PyPI Wheel](https://img.shields.io/pypi/wheel/sigil-cli.svg)](https://pypi.org/project/sigil-cli/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -50,7 +50,7 @@ pip install sigil-cli[completion]
 
 ```text
 project_root/
-├── mycli.py              # drop‑in entry script (alias this)
+├── mycli.py              # drop‑in bootstrap script (alias this)
 ├── manifest.yml          # lists all YAML config files to load
 ├── yml/                  
 │   ├── root.yml          # root command definition
@@ -61,12 +61,15 @@ project_root/
     └── ...               # other scripts
 ```
 
+ps: don't shoot yourself in the foot, don't symlink the bootstrap script.
+
 ### 1. Entry script
 
 Create `mycli.py`:
 
 ```python
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
 from pathlib import Path
 from sigil import run_from_config
 
@@ -136,7 +139,7 @@ chmod +x mycli.py
 
 ## Configuration Reference
 
-### Root
+### Root Command
 
 | Field | Description |
 | --- | --- |
@@ -150,12 +153,13 @@ chmod +x mycli.py
 | `name` | Subcommand name |
 | `parent` | Parent command (must exist elsewhere in a config) |
 | `help` | Help text for this subcommand |
-| `script` | Python module name (without `.py`) inside `script_dir` or as absolute path |
+| `script` | Python module name (without `.py`) inside `script_dir`, absolute paths supported |
 | `args` | List of argument definitions (see below) |
 | `default` | If `true`, this subcommand is used when no subcommand is given |
-| any other parser kwarg | except for `dest` and `formatter_class` they are all supported |
+| `load_ignore`| If `true` skips this command (or top level object) from being loaded into the command tree|
+| any other parser kwarg | except for `dest`, `parents` and `formatter_class` they are all supported |
 
-Note that `parent` does not refer to argparse's parent parameter but is only used to resolve the parser tree. Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `this` command's parents in the tree.
+Note that `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree. Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `parent` commands in the tree.
 
 ### Argument
 
@@ -185,10 +189,24 @@ Groups and mutex groups are also suppored via the "kind" parameter (defaults to 
 The `name` field can be `--flag` for flags or a string for positional arguments.
 Both literal string and list of strings are supported.
 
+Types (`type:`) only supports python builtins 
+
+### Script files
+
+Each script files have as only requirement that they need to define a `def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None` method.
+
+args is the by argparse supplied namespace (parsed with parse_known_args), any additional args can be found in `ctx['other_args']`
+
+scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to, remove or otherwise modify args.namespace and ctx to enrich or modify the behaviour of supsequent scripts.
+
+### Misc
+
+`load_ignore` may be used to detaching commands from the command tree for any purpose (deprecation, development, etc) or for non schema-compliant objects at the top level of a file, this may be useful to define anchors or references that should not directly be read as a command.
+
 ## Tab‑Completion (argcomplete)
 
 Sigil registers itself with `argcomplete` automatically if available on your system.  
-To enable completion, install [argcomplete](https://github.com/kislyuk/argcomplete) and activate it for your entry script:
+To enable completion, install [argcomplete](https://github.com/kislyuk/argcomplete) and activate it for your entry script (or use the builtin argcomplete comment):
 
 ```bash
 pip install argcomplete

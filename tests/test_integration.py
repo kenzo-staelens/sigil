@@ -48,6 +48,44 @@ def test_integration_run_from_config_with_capsys(tmp_path, capsys):
     captured = capsys.readouterr()
     assert captured.out.strip() == "Hello, Sigil!"
 
+def test_integration_run_from_config_with_unknown_args(tmp_path, capsys):
+    """Test run_from_config and capture output."""
+    # Same setup as above
+    manifest = tmp_path / "manifest.yml"
+    manifest.write_text("- root.yml\n- hello.yml\n")
+
+    root_data = {"root": {"name": "hello", "script_dir": "scripts", "known_args": False}}
+    (tmp_path / "root.yml").write_text(yaml.dump(root_data))
+
+    hello_data = {
+        "hello_cmd": {
+            "name": "hello",
+            "parent": "root",
+            "script": "hello",
+            "args": [{"name": "--name", "default": "world"}],
+        }
+    }
+    (tmp_path / "hello.yml").write_text(yaml.dump(hello_data))
+
+    script_dir = tmp_path / "scripts"
+    script_dir.mkdir()
+    script_file = script_dir / "hello.py"
+    script_file.write_text(
+        "import argparse\n"
+        "def run(args, ctx):\n"
+        "    print(ctx['other_args'])\n"
+    )
+
+    with patch.object(sys, "argv", ["prog", "hello", "--name", "Sigil", "--unknown"]):
+        with pytest.raises(SystemExit):
+            run_from_config(str(tmp_path))
+        root_data['root']['known_args'] = True
+        (tmp_path / "root.yml").write_text(yaml.dump(root_data))
+
+        run_from_config(str(tmp_path))
+    
+    captured = capsys.readouterr()
+    assert captured.out.strip() == "['--unknown']"
 
 def test_builder_required_args():
     """Test that positional args are marked required."""
