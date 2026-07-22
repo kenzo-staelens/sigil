@@ -1,3 +1,7 @@
+from importlib.metadata import version
+
+__version__ = version('sigil-cli')
+
 from .entrypoint import run_from_config
 from .models import (
     Argument,
@@ -14,14 +18,14 @@ from .stages import (
 )
 
 __all__ = (
-    run_from_config,
-    Argument,
-    ArgumentGroup,
-    LibArgParser,
-    ParserConfig,
-    SubcommandModule,
-    YamlReader,
-    Resolver,
-    Builder,
-    ScriptLoader,
+    'run_from_config',
+    'Argument',
+    'ArgumentGroup',
+    'LibArgParser',
+    'ParserConfig',
+    'SubcommandModule',
+    'YamlReader',
+    'Resolver',
+    'Builder',
+    'ScriptLoader',
 )

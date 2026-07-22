@@ -7,6 +7,7 @@
 - `sigil validate` command to run basic validation on a sigil.
   Useful for catching schema errors early in development or CI
   without running the actual commands.
+- `sigil --version` added.
 - This changelog file, retroactively documenting all prior releases.
 - Added a toggle for `parse_args`/`parse_known_args` (default `parse_args`)
 
