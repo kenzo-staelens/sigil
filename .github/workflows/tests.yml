@@ -15,6 +15,7 @@ jobs:
       - run: pip install pytest pytest-cov
       - run: pytest --cov=sigil --cov-report=xml
       - uses: coverallsapp/github-action@v2
+        continue-on-error: true # <-- Prevents Coveralls from breaking test status
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file: coverage.xml
@@ -26,6 +27,7 @@ jobs:
     steps:
       - name: Coveralls Finished
         uses: coverallsapp/github-action@v2
+        continue-on-error: true # <-- Prevents Coveralls from breaking test status
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true

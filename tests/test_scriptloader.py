@@ -35,8 +35,8 @@ def test_script_loader_import_module(tmp_path):
     loader = ScriptLoader()
     module = loader.import_module(str(tmp_path), "scripts", "my_script")
     assert hasattr(module, "run")
+    assert module is not None
     assert callable(module.run)
-
 
 @patch("sigil.stages.script_loader.importlib.util")
 def test_script_loader_import_module_mock(mock_importlib, tmp_path):

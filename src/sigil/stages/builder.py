@@ -1,7 +1,7 @@
 from sigil.models import Argument, ArgumentGroup, LibArgParser, ParserConfig
 
 try:
-    import argcomplete
+    import argcomplete  # type: ignore
     USE_ARGCOMPLETE = True
 except Exception:
     USE_ARGCOMPLETE=False
@@ -62,7 +62,6 @@ class Builder:
         parser.add_argument(
             *argument_config.name,
             help=argument_config.help,
-            action=argument_config.action,
             **(argument_config.kw | conditional_args)
         )
 
@@ -81,7 +80,7 @@ class Builder:
             # for all intents and purposes in attach_argument(group)
             # a group has the same interface used in these methods
             # as a parser has; we can thus assume group is a parser
-            cls.attach_argument(grp, arg)
+            cls.attach_argument(grp, arg) # type: ignore
 
     @classmethod
     def build(

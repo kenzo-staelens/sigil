@@ -24,8 +24,6 @@ class Resolver:
             for internal_id, config_item in raw_config.items():
                 if internal_id in resolved: # already resolved, "del" is dangerous
                     continue
-                if not config_item.load:
-                    continue
 
                 if internal_id == 'root':
                     changed=True

@@ -75,6 +75,12 @@
         "script": {
           "type": "string"
         },
+        "load_ignore": {
+          "type": "boolean"
+        },
+        "default": {
+          "type": "boolean"
+        },
         "args": {
           "type": "array",
           "items": {

@@ -16,6 +16,7 @@ UNSUPPORTED_KWARGS = [
 class ParserConfig:
     name: str
     script_dir: str | None = None # only for root
+    known_args: bool = False  # whether to use parse_args, or parse_known_args
     # help is so uber-common that while yes it could go into
     # parser_kwargs i still explicitly defined it
     help: str | None = None
@@ -25,7 +26,6 @@ class ParserConfig:
     # this one is just for resolving the config files into a tree
     parent: str | None = None
     default: bool = False
-    load: bool = True
     subparsers: 'dict[str, ParserConfig]' = field(default_factory=dict)
     # anything not already in here
     parser_kwargs: dict[str, Any] = field(default_factory=dict)
