@@ -54,7 +54,14 @@ def test_integration_run_from_config_with_unknown_args(tmp_path, capsys):
     manifest = tmp_path / "manifest.yml"
     manifest.write_text("- root.yml\n- hello.yml\n")
 
-    root_data = {"root": {"name": "hello", "script_dir": "scripts", "known_args": False}}
+    root_data = {
+        "root":
+            {
+                "name": "hello",
+                "script_dir": "scripts",
+                "known_args": False,
+            }
+        }
     (tmp_path / "root.yml").write_text(yaml.dump(root_data))
 
     hello_data = {
@@ -83,14 +90,14 @@ def test_integration_run_from_config_with_unknown_args(tmp_path, capsys):
         (tmp_path / "root.yml").write_text(yaml.dump(root_data))
 
         run_from_config(str(tmp_path))
-    
+
     captured = capsys.readouterr()
     assert captured.out.strip() == "['--unknown']"
 
 def test_builder_required_args():
     """Test that positional args are marked required."""
     parser = LibArgParser()
-    arg = Argument.factory(name="positional", required=False)
+    arg = Argument.factory(name="positional", required=False) # type: ignore that's what kwargs is
     Builder.attach_argument(parser, arg)
 
     # Required positional arguments have required=True by argparse

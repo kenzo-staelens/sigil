@@ -51,14 +51,13 @@ class Argument:
     # help is so uber-common that while yes it could go into
     # kw i still explicitly defined it
     help: str | None = None
-    action: str | None = None
     # anything we haven't explicitly defined.. yet
     kw: dict[str, Any] = field(default_factory=dict)
 
     # Source - https://stackoverflow.com/a/74459763
 
     @classmethod
-    def factory(cls, **kwargs: dict) -> 'Argument | ArgumentGroup':
+    def factory(cls, **kwargs: dict[str, Any]) -> 'Argument | ArgumentGroup':
         kind = kwargs.get('kind', 'argument')  # default to argument
         if kind not in ALLOWED_KINDS:
             raise ValueError(f'invalid kind {kind}')

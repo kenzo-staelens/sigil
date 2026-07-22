@@ -2,6 +2,7 @@
 
 > Declarative argparse, without the CLI boilerplate.
 
+
 Sigil is a lightweight, declarative CLI framework for Python. Define your command tree in YAML (or any other format), and sigil builds the `argparse` parser on the fly. Complete with subcommands and dynamic script loading.  
 It plays nicely with `argcomplete` out of the box.
 
@@ -12,6 +13,10 @@ It plays nicely with `argcomplete` out of the box.
 [![Downloads](https://static.pepy.tech/badge/sigil-cli)](https://pepy.tech/project/sigil-cli)
 [![Tests](https://github.com/kenzo-staelens/sigil/actions/workflows/tests.yml/badge.svg)](https://github.com/kenzo-staelens/sigil/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/kenzo-staelens/sigil/badge.svg?branch=main)](https://coveralls.io/github/kenzo-staelens/sigil?branch=main)
+
+<div align="center">
+  <sub>in production since April 2026</sub>
+</div>
 
 ---
 

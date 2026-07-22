@@ -4,9 +4,9 @@
 
 ### Added
 
-- `sigil validate` command (work in progress) to validate a YAML configuration
-  file without instantiating the full argument parser. Useful for catching
-  schema errors early in development or CI.
+- `sigil validate` command to run basic validation on a sigil.
+  Useful for catching schema errors early in development or CI
+  without running the actual commands.
 - This changelog file, retroactively documenting all prior releases.
 - Added a toggle for `parse_args`/`parse_known_args` (default `parse_args`)
 

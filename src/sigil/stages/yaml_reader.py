@@ -28,7 +28,7 @@ class YamlReader:
     def load(
         cls,
         config_root: str,
-        manifest_file='manifest.yml'
+        manifest_file='manifest.yml',
     ) -> dict[str, ParserConfig]:
         config_root_path = Path(config_root)
         manifest = cls.read_file(config_root_path/manifest_file)
@@ -67,7 +67,10 @@ class YamlReader:
         return loaded_config
 
     @classmethod
-    def convert_args(cls, loaded_entry: dict[str, dict[str, Any]]):
+    def convert_args(
+        cls,
+        loaded_entry: dict[str, dict[str, Any]],
+    ):
         # while yes default factory this fixes the edge case where the key is defined
         # but without values
         for command_def in loaded_entry.values():

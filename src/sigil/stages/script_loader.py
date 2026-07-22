@@ -1,20 +1,27 @@
 import importlib.util
-from importlib.abc import Loader
+import logging
 import sys
 from argparse import Namespace
+from importlib.abc import Loader
 from pathlib import Path
-import logging
+from typing import cast
 
 from sigil.models import LibArgParser, ParserConfig, SubcommandModule
-from typing import cast
 
 _logger = logging.getLogger(__name__)
 
 class ScriptLoader:
     @classmethod
-    def import_module(cls, config_root, path:str | None, module_name: str) -> SubcommandModule | None:
+    def import_module(
+        cls,
+        config_root,
+        path:str | None,
+        module_name: str
+    ) -> SubcommandModule | None:
         if path is None:
-            _logger.warning(f"no root path declared for script loading, skipping {module_name}")
+            _logger.warning(
+                f"no root path declared for script loading, skipping {module_name}"
+            )
             return None
         config_root_path = Path(config_root)
         file_path = str(config_root_path/path/f'{module_name}.py')

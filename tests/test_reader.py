@@ -24,7 +24,7 @@ def test_yaml_reader_load(tmp_path, sample_manifest):
     assert sub.script == "sub_script"
     assert len(sub.args) == 1
     assert sub.args[0].name == ["--flag"]
-    assert sub.args[0].action == "store_true"
+    assert sub.args[0].kw['action'] == "store_true"
 
 
 def test_yaml_reader_duplicate_warning(caplog, tmp_path):
