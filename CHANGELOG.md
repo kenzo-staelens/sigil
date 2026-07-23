@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - DD/MM/YYY
+
+### Changed
+
+- Added proper exit codes and "exited with x errors and y warnings" to validator
+- `sigil validate` now outputs a validation success message instead of silently exiting.
+
 ## [1.2.0] - 22/07/2026
 
 ### Added
@@ -37,7 +44,6 @@
   Running `sigil init` scaffolds a working file
   to help new users get started immediately.
 
-
 ## [1.0.0]
 
 ### Added
@@ -51,7 +57,6 @@
 - **Extended parser configuration** – additional parser‑level options
   (`description`, `epilog`, `formatter_class`, `add_help`, etc.) are now
   exposed.
-
 
 ### Fixed
 
@@ -69,3 +74,4 @@
   `append_const`, `count`, `help`, `version`, `extend`).
 - *Not yet implemented:* automatic type inference (primitive types),
   argument groups, and mutex groups.
+  

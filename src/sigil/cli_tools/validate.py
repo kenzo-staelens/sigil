@@ -111,4 +111,3 @@ def validate_project(projectroot):
         sys.exit(1)
     else:
         print("Validation passed successfully.", file=sys.stderr)
-        sys.exit(0)

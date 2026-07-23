@@ -2,7 +2,8 @@
 
 > Declarative argparse, without the CLI boilerplate.
 
-Sigil is a lightweight, declarative CLI framework for Python. Define your command tree in YAML (or any other format), and sigil builds the `argparse` parser on the fly. Complete with subcommands and dynamic script loading.  
+Sigil is a lightweight, declarative CLI framework for Python. Define your command tree in YAML (or any other format),
+and sigil builds the `argparse` parser on the fly. Complete with subcommands and dynamic script loading.  
 It plays nicely with `argcomplete` out of the box.
 
 [![PyPI Version](https://img.shields.io/pypi/v/sigil-cli)](https://pypi.python.org/pypi/sigil-cli)
@@ -170,7 +171,8 @@ chmod +x mycli.py
 | `load_ignore` | If `true` skips this command (or top level object) from being loaded into the command tree |
 | any other parser kwarg | except for `dest`, `parents` and `formatter_class` they are all supported |
 
-Note that `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree. Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `parent` commands in the tree.
+Note that `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree.
+Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `parent` commands in the tree.
 
 ### Argument
 
@@ -204,11 +206,13 @@ Types (`type:`) only supports python builtins
 
 ### Script files
 
-Each script files have as only requirement that they need to define a `def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None` method.
+Each script files have as only requirement that they need to define a
+`def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None` method.
 
 args is the by argparse supplied namespace (parsed with parse_known_args), any additional args can be found in `ctx['other_args']`
 
-scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to, remove or otherwise modify args.namespace and ctx to enrich or modify the behaviour of supsequent scripts.
+scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to,
+remove or otherwise modify args.namespace and ctx to enrich or modify the behaviour of supsequent scripts.
 
 ## Sigil CLI Commands
 
@@ -219,16 +223,20 @@ scripts run in sequence from command -> subcommand -> sub sub command -> ... and
 | `sigil init [project_name]` | Creates a new project folder with a sample `sigil.yaml` and a ready-to-run Python entrypoint. |
 | `sigil validate [project_path]` | Checks your `sigil.yaml` for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
 
-*(Note: Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management commands above. You alias and run `main.py`. the `sigil` prefix is a different namespace.)*
+*(Note: Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management
+commands above. You alias and run `main.py`. the `sigil` prefix is a different namespace.)*
 
 ### Misc
 
-`load_ignore` may be used to detaching commands from the command tree for any purpose (deprecation, development, etc) or for non schema-compliant objects at the top level of a file, this may be useful to define anchors or references that should not directly be read as a command.
+`load_ignore` may be used to detaching commands from the command tree for any purpose
+(deprecation, development, etc) or for non schema-compliant objects at the top level of a file, this may be useful to
+define anchors or references that should not directly be read as a command.
 
 ## Tab‑Completion (argcomplete)
 
 Sigil registers itself with `argcomplete` automatically if available on your system.  
-To enable completion, install [argcomplete](https://github.com/kislyuk/argcomplete) and activate it for your entry script (or use the builtin argcomplete comment):
+To enable completion, install [argcomplete](https://github.com/kislyuk/argcomplete) and activate it for your entry
+script (or use the builtin argcomplete comment):
 
 ```bash
 pip install argcomplete

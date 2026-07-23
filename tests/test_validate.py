@@ -37,14 +37,14 @@ root:
     assert not caplog.records
 
 def test_validate_project_missing_manifest( tmp_path: Path) -> None:
-    """Test that validate_project exits with code 1 when manifest.yml is missing."""
+    """Test that validate_project exits with code 2 when manifest.yml is missing."""
     project_root = tmp_path / "mycli"
     project_root.mkdir()
 
     with pytest.raises(SystemExit) as exc_info:
         validate_project(project_root)
 
-    assert exc_info.value.code == 1
+    assert exc_info.value.code == 2
 
 def test_validate_project_missing_root_key(
     tmp_path: Path,
@@ -91,7 +91,8 @@ root:
     # Do NOT create scripts/ directory
 
     with caplog.at_level(logging.WARNING):
-        validate_project(project_root)
+        with pytest.raises(SystemExit):
+            validate_project(project_root)
 
     assert "script_dir may be missing or unreachable" in caplog.text
 
@@ -130,7 +131,8 @@ greet:
     (scripts_dir / "greet.py").touch()
 
     with caplog.at_level(logging.WARNING):
-        validate_project(project_root)
+        with pytest.raises(SystemExit):
+            validate_project(project_root)
 
     assert "command greet may be missing help text" in caplog.text
 
@@ -170,7 +172,8 @@ greet:
     # Do NOT create greet.py
 
     with caplog.at_level(logging.WARNING):
-        validate_project(project_root)
+        with pytest.raises(SystemExit):
+            validate_project(project_root)
 
     assert 'script "greet" defined on command "greet" not found' in caplog.text
 
@@ -207,7 +210,8 @@ greet:
     # Do NOT create scripts/ directory
 
     with caplog.at_level(logging.WARNING):
-        validate_project(project_root)
+        with pytest.raises(SystemExit):
+            validate_project(project_root)
 
     assert 'script defined on "greet" but no script dir defined' in caplog.text
 
@@ -258,6 +262,7 @@ bar:
     for cmd in ("root", "foo", "bar"):
         (scripts_dir / f"{cmd}.py").touch()
 
-    validate_project(project_root)
+    with pytest.raises(SystemExit):
+        validate_project(project_root)
 
     assert 'last default bar overridden with foo' in caplog.text
