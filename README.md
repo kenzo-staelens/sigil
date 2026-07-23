@@ -2,7 +2,6 @@
 
 > Declarative argparse, without the CLI boilerplate.
 
-
 Sigil is a lightweight, declarative CLI framework for Python. Define your command tree in YAML (or any other format), and sigil builds the `argparse` parser on the fly. Complete with subcommands and dynamic script loading.  
 It plays nicely with `argcomplete` out of the box.
 
@@ -45,11 +44,18 @@ your command structure modular and flexible.
 pip install sigil-cli
 ```
 
-or include argcomplete
+*optionally include argcomplete with `sigil-cli[completion]`*
+
+The `init` command generates a project directory with a sample configuration and entrypoint:
 
 ```bash
-pip install sigil-cli[completion]
+sigil init demo
+sigil validate demo/ # optional, should not output anything for correct configurations
+cd demo
+python main.py --help
 ```
+
+For a full walkthrough with custom commands and arguments, jump to the Quick Start below.
 
 ### 0. Recommended file structure
 
@@ -161,7 +167,7 @@ chmod +x mycli.py
 | `script` | Python module name (without `.py`) inside `script_dir`, absolute paths supported |
 | `args` | List of argument definitions (see below) |
 | `default` | If `true`, this subcommand is used when no subcommand is given |
-| `load_ignore`| If `true` skips this command (or top level object) from being loaded into the command tree|
+| `load_ignore` | If `true` skips this command (or top level object) from being loaded into the command tree |
 | any other parser kwarg | except for `dest`, `parents` and `formatter_class` they are all supported |
 
 Note that `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree. Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `parent` commands in the tree.
@@ -194,7 +200,7 @@ Groups and mutex groups are also suppored via the "kind" parameter (defaults to 
 The `name` field can be `--flag` for flags or a string for positional arguments.
 Both literal string and list of strings are supported.
 
-Types (`type:`) only supports python builtins 
+Types (`type:`) only supports python builtins
 
 ### Script files
 
@@ -203,6 +209,17 @@ Each script files have as only requirement that they need to define a `def run(a
 args is the by argparse supplied namespace (parsed with parse_known_args), any additional args can be found in `ctx['other_args']`
 
 scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to, remove or otherwise modify args.namespace and ctx to enrich or modify the behaviour of supsequent scripts.
+
+## Sigil CLI Commands
+
+`sigil` ships with its own lightweight toolbelt to manage your projects:
+
+| Command | Purpose |
+| --- | --- |
+| `sigil init [project_name]` | Creates a new project folder with a sample `sigil.yaml` and a ready-to-run Python entrypoint. |
+| `sigil validate [project_path]` | Checks your `sigil.yaml` for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
+
+*(Note: Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management commands above. You alias and run `main.py`. the `sigil` prefix is a different namespace.)*
 
 ### Misc
 
