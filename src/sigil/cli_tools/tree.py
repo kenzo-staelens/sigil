@@ -1,6 +1,7 @@
 import argparse
 
-from sigil import Builder, Resolver, YamlReader
+from sigil import Builder, Parser, Resolver
+from sigil.datasource import YmlSource
 
 
 # adapted from https://stackoverflow.com/questions/78166654/how-can-i-print-the-tree-structure-of-subparsers-of-an-argparse-parser-in-python/78246362#78246362
@@ -33,7 +34,7 @@ def parser_tree(
 
 
 def display_project(projectroot):
-    raw = YamlReader.load(projectroot)
+    raw = Parser(YmlSource).load(projectroot)
     resolved = Resolver.resolve_inheritance(raw)
     parser = Builder.build(resolved)
     print(parser_tree(parser))

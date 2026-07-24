@@ -1,6 +1,11 @@
 # Changelog
 
-## [Unreleased] - DD/MM/YYYY
+## [1.4.0] - DD/MM/YYYY
+
+### Changed
+
+- Refactored old YamlLoader into Parser and Datasources for better integration of future datasources.
+  This way custom data sources no longer need to manually convert to internal representation.
 
 ## [1.3.0] - 24/07/2026
 

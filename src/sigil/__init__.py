@@ -12,9 +12,9 @@ from .models import (
 )
 from .stages import (
     Builder,
+    Parser,
     Resolver,
     ScriptLoader,
-    YamlReader,
 )
 
 __all__ = (
@@ -24,7 +24,7 @@ __all__ = (
     'LibArgParser',
     'ParserConfig',
     'SubcommandModule',
-    'YamlReader',
+    'Parser',
     'Resolver',
     'Builder',
     'ScriptLoader',

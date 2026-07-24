@@ -1,13 +1,14 @@
 import yaml
 
-from sigil import ParserConfig, YamlReader
+from sigil import Parser, ParserConfig
+from sigil.datasource import YmlSource
 from sigil.models.command import UNSUPPORTED_KWARGS
 
 
 def test_yaml_reader_load(tmp_path, sample_manifest):
-    """Test that YamlReader.load reads all YAML files and converts args."""
+    """Test that Parser(YmlSource).load reads all YAML files and converts args."""
     config_root = sample_manifest
-    loaded = YamlReader.load(config_root)
+    loaded = Parser(YmlSource).load(config_root)
 
     assert "root" in loaded
     assert "sub" in loaded
@@ -40,7 +41,7 @@ def test_yaml_reader_duplicate_warning(caplog, tmp_path):
     (tmp_path / "b.yml").write_text(yaml.dump(b_data))
 
     with caplog.at_level("WARNING"):
-        loaded = YamlReader.load(tmp_path)
+        loaded = Parser(YmlSource).load(tmp_path)
 
     assert "[cmd] already defined" in caplog.text
     assert loaded["cmd"].help == "from a"  # first wins
@@ -63,7 +64,7 @@ def test_yaml_reader_invalid_arg(caplog, tmp_path):
     (tmp_path / "cmd.yml").write_text(yaml.dump(cmd_data))
 
     with caplog.at_level("ERROR"):
-        loaded = YamlReader.load(tmp_path)
+        loaded = Parser(YmlSource).load(tmp_path)
 
     assert "invalid argument definition" in caplog.text
     assert len(loaded["cmd"].args) == 1
@@ -85,7 +86,7 @@ def test_invalid_parser(caplog, tmp_path):
     (tmp_path / "cmd.yml").write_text(yaml.dump(cmd_data))
 
     with caplog.at_level("WARNING"):
-        YamlReader.load(tmp_path)
+        Parser(YmlSource).load(tmp_path)
 
     for kw in UNSUPPORTED_KWARGS:
         assert f"'{kw}' unsupported" in caplog.text

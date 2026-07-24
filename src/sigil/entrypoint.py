@@ -2,14 +2,16 @@ import logging
 import sys
 from typing import Any
 
-from .stages import Builder, Resolver, ScriptLoader, YamlReader
+from .datasource import YmlSource
+from .stages import Builder, Parser, Resolver, ScriptLoader
 
 _logger = logging.getLogger(__name__)
 
 # default to yamlloader, use whatever datastore you feel like
-def run_from_config(config_root: str, loader_class = YamlReader):
-    raw_data = loader_class.load(config_root)
+def run_from_config(config_root: str, datasource = YmlSource):
+    raw_data = Parser(YmlSource).load(config_root)
     resolved = Resolver.resolve_inheritance(raw_data)
+    # parser beyond here is an argparser
     parser = Builder.build(resolved)
 
     execution_context = {}

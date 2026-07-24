@@ -248,7 +248,7 @@ Then run your script and hit <kbd>Tab</kbd> – subcommands and flags will compl
 
 ## Pluggable Backends
 
-Sigil uses yaml by default, but you can supply any loader that returns a `dict[str, ParserConfig]`:
+Sigil uses yaml by default, but you can supply any datasource that we can convert it's output into `ParserConfig`:
 
 ```python
 from sigil import run_from_config
@@ -256,9 +256,14 @@ from sigil import run_from_config
 # Use JSON instead:
 class JsonReader:
     @classmethod
-    def load(cls, config_root):
-        # read *.json, parse, convert to dict of ParserConfig
+    def read_manifest(cls, config_root: Path) -> list | None:
+        # read target paths for loading configuration
         ...
+    
+    def read_configuration(cls, target: Path) -> dict | None:
+        # read *.json, parse, convert to dict of raw data
+        ...
+
 
 run_from_config("/path/to/config", loader_class=JsonReader)
 ```
@@ -266,5 +271,5 @@ run_from_config("/path/to/config", loader_class=JsonReader)
 You can also pass a pre‑loaded dictionary directly by wrapping it:
 
 ```python
-run_from_config(my_dict, loader_class=DictLoader)
+run_from_config(my_dict, loader_class=DictReader)
 ```

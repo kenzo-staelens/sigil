@@ -3,7 +3,8 @@ import logging
 import sys
 from pathlib import Path
 
-from sigil import Builder, Resolver, YamlReader
+from sigil import Builder, Parser, Resolver
+from sigil.datasource import YmlSource
 
 
 # small helper to capture logs from in the guts of sigil
@@ -48,7 +49,7 @@ def _validate_project(projectroot):
         _logger.error('missing manifest.yml, aborting.')
         sys.exit(1)
 
-    raw = YamlReader.load(projectroot)
+    raw = Parser(YmlSource).load(projectroot)
 
     # these are easier for us to check
     if 'root' not in raw:

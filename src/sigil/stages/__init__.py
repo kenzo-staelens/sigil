@@ -1,11 +1,11 @@
 from .builder import Builder
+from .parser import Parser
 from .resolver import Resolver
 from .script_loader import ScriptLoader
-from .yaml_reader import YamlReader
 
 __all__ = [
-    YamlReader,
-    Resolver,
-    Builder,
-    ScriptLoader,
+    'Parser',
+    'Resolver',
+    'Builder',
+    'ScriptLoader',
 ]
