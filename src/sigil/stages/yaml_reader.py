@@ -43,8 +43,12 @@ class YamlReader:
                 continue
             tmp = {}
             for k, v in loaded_entry.items():
-                if v.get('load_ignore'):
-                    _logger.warning(f'{k} marked as load_ignore, skipping')
+                if not v.get('load', True):
+                    _logger.info(f'{k} marked as unloaded')
+                    # truncate extra data
+                    # the key will later be used for differentiating
+                    # orphaned children vs intentionally unloaded subtrees
+                    tmp[k] = ParserConfig.construct_unloaded_data(k, v)
                     continue
                 tmp[k] = v  # pesky can't del in for loop :/
             loaded_entry = tmp
@@ -57,7 +61,7 @@ class YamlReader:
             try:
                 loaded_config[k] = ParserConfig.factory(**v)
             except Exception as e:
-                _logger.error(f'failed to parse config {k}, ignoring\n{e}')
+                _logger.error(f"failed to parse config '{k}', ignoring\n  {e}")
         # pesky "dictionary changed size during iteration"
         loaded_config = {
             k: v

@@ -29,9 +29,12 @@ class ParserConfig:
     subparsers: 'dict[str, ParserConfig]' = field(default_factory=dict)
     # anything not already in here
     parser_kwargs: dict[str, Any] = field(default_factory=dict)
+    load: bool = True
 
     @classmethod
     def factory(cls, **kwargs):
+        if 'name' not in kwargs:
+            raise ValueError("required argument 'name' not defined.")
         uncaught_kwargs = {k: kwargs[k] for k in kwargs if k not in cls.__match_args__}
         caught_kwargs = {k: kwargs[k] for k in kwargs if k in cls.__match_args__}
         parser_kwargs = {}
@@ -46,3 +49,17 @@ class ParserConfig:
             else:
                 parser_kwargs[kwarg] = value
         return cls(**caught_kwargs, parser_kwargs=parser_kwargs)
+
+    @classmethod
+    def construct_unloaded_data(cls, key: str, source: dict):
+        # this dataclass requires several attributes for either validation checks
+        # or instantiation requirements
+        # all get defined here, regardless of source data
+        # since this object is later required to validate and build tree
+        # structure minimal data is required
+        return {
+            'name': key,
+            'help': source.get('help', 'missing'),
+            'load': source.get('load'),
+            'parent': source.get('parent')
+        }

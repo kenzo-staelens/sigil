@@ -2,6 +2,7 @@ import argparse
 
 from sigil import __version__
 from sigil.cli_tools.init import create_project
+from sigil.cli_tools.tree import display_project
 from sigil.cli_tools.validate import validate_project
 
 
@@ -17,6 +18,12 @@ def main():
     validate = sub.add_parser(name="validate", help="validate structure of a sigil")
     validate.add_argument('path', help="project to validate")
 
+    validate = sub.add_parser(
+        name="tree",
+        help="display the command structure of a sigil."
+    )
+    validate.add_argument('path', help="project to validate")
+
     args = parser.parse_args()
 
     if args.command == 'init':
@@ -24,6 +31,9 @@ def main():
         return
     if args.command == 'validate':
         validate_project(args.path)
+        return
+    if args.command == 'tree':
+        display_project(args.path)
         return
 
 if __name__ == "__main__":

@@ -1,11 +1,26 @@
 # Changelog
 
-## [Unreleased] - DD/MM/YYY
+## [Unreleased] - DD/MM/YYYY
 
-### Changed
+## [1.3.0] - 24/07/2026
+
+### Added
 
 - Added proper exit codes and "exited with x errors and y warnings" to validator
 - `sigil validate` now outputs a validation success message instead of silently exiting.
+- Added an info level log message for `load: false` entries
+- Added a `sigil tree` command to print out the overall command structure of a sigil.
+
+### Changed
+
+- Renamed `load_ignore` (default false) to `load` (default true) to have a more sensible name.
+- Updated validation such that intentionally unloaded trees don't cause orphan warnings.
+- Added exception handling to argparse instantiation such that malformed parameters
+  still has partial availability instead of erroring.
+
+### Fixed
+
+- Fixed error handling for missing name parameters on commands, now logs and continues instead of raising an error.
 
 ## [1.2.0] - 22/07/2026
 

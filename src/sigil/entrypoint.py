@@ -7,7 +7,6 @@ from .stages import Builder, Resolver, ScriptLoader, YamlReader
 _logger = logging.getLogger(__name__)
 
 # default to yamlloader, use whatever datastore you feel like
-tmp = 0
 def run_from_config(config_root: str, loader_class = YamlReader):
     raw_data = loader_class.load(config_root)
     resolved = Resolver.resolve_inheritance(raw_data)

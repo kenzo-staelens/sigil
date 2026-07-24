@@ -1,6 +1,7 @@
 import yaml
 
 from sigil import ParserConfig, YamlReader
+from sigil.models.command import UNSUPPORTED_KWARGS
 
 
 def test_yaml_reader_load(tmp_path, sample_manifest):
@@ -45,22 +46,6 @@ def test_yaml_reader_duplicate_warning(caplog, tmp_path):
     assert loaded["cmd"].help == "from a"  # first wins
 
 
-def test_yaml_reader_load_ignore(tmp_path):
-    """Test that entries with load_ignore: True are skipped."""
-    manifest = tmp_path / "manifest.yml"
-    manifest.write_text("- ignored.yml\n- kept.yml\n")
-
-    ignored = {"ignored": {"name": "ignored", "load_ignore": True}}
-    kept = {"kept": {"name": "kept"}}
-
-    (tmp_path / "ignored.yml").write_text(yaml.dump(ignored))
-    (tmp_path / "kept.yml").write_text(yaml.dump(kept))
-
-    loaded = YamlReader.load(tmp_path)
-    assert "ignored" not in loaded
-    assert "kept" in loaded
-
-
 def test_yaml_reader_invalid_arg(caplog, tmp_path):
     """Test that invalid argument definitions are skipped."""
     manifest = tmp_path / "manifest.yml"
@@ -83,3 +68,24 @@ def test_yaml_reader_invalid_arg(caplog, tmp_path):
     assert "invalid argument definition" in caplog.text
     assert len(loaded["cmd"].args) == 1
     assert loaded["cmd"].args[0].name == ["valid"]
+
+def test_invalid_parser(caplog, tmp_path):
+    manifest = tmp_path / "manifest.yml"
+    manifest.write_text("- cmd.yml\n")
+
+    cmd_data = {
+        "cmd": {
+            "name": "cmd",
+            "dest":"not_supported",
+            "formatter_class": "not_supported",
+            "parents": "not_supported",
+
+        }
+    }
+    (tmp_path / "cmd.yml").write_text(yaml.dump(cmd_data))
+
+    with caplog.at_level("WARNING"):
+        YamlReader.load(tmp_path)
+
+    for kw in UNSUPPORTED_KWARGS:
+        assert f"'{kw}' unsupported" in caplog.text

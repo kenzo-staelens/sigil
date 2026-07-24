@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from sigil.models import ParserConfig
 
@@ -19,6 +20,10 @@ class Resolver:
         resolved: dict[str, ParserConfig] = {}
         changed = True
 
+        if 'root' not in raw_config:
+            _logger.critical('missing root definition, aborting.')
+            sys.exit(1)
+
         while changed:
             changed = False # stays false unless something is attached
             for internal_id, config_item in raw_config.items():
@@ -32,15 +37,26 @@ class Resolver:
 
                 parent = config_item.parent
 
-                if parent and parent in resolved:
-                    changed = True # only run a new pass if something was attached
+                if not parent or parent not in resolved:
+                    continue
+
+                # only attach if we can
+                changed = True
+                if config_item.load:
+                    # only actually attach if loaded
+                    # so we can still warn on actual orphans
+                    # while ignoring intentionally disabled objects
                     subparsers = resolved[parent].subparsers
                     subparsers[config_item.name]= config_item
                     resolved[parent].subparsers = subparsers
-                    resolved[internal_id] = config_item
+                else:
+                    _logger.info(f"{internal_id} marked as unloaded, ignoring tree")
+                    # no continue as we still need to register the key
+                    # such that it's children don't cause warnings
+                resolved[internal_id] = config_item
 
         # log unattached items:
         for item in (raw_config.keys() - resolved.keys()):
-            _logger.warning(f'failed to resolve command path for {item}')
+            _logger.warning(f'Command {item} may be orphaned')
 
         return resolved['root']  # one "root" is required

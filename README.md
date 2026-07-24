@@ -167,8 +167,8 @@ chmod +x mycli.py
 | `help` | Help text for this subcommand |
 | `script` | Python module name (without `.py`) inside `script_dir`, absolute paths supported |
 | `args` | List of argument definitions (see below) |
-| `default` | If `true`, this subcommand is used when no subcommand is given |
-| `load_ignore` | If `true` skips this command (or top level object) from being loaded into the command tree |
+| `default` | If `True`, this subcommand is used when no subcommand is given |
+| `load` | If `False` skips this command (or top level object) from being loaded into the command tree (default `True`) |
 | any other parser kwarg | except for `dest`, `parents` and `formatter_class` they are all supported |
 
 Note that `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree.
@@ -220,8 +220,9 @@ remove or otherwise modify args.namespace and ctx to enrich or modify the behavi
 
 | Command | Purpose |
 | --- | --- |
-| `sigil init [project_name]` | Creates a new project folder with a sample `sigil.yaml` and a ready-to-run Python entrypoint. |
-| `sigil validate [project_path]` | Checks your `sigil.yaml` for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
+| `sigil init [project_name]` | Creates a new project folder with a sample ready-to-run Python entrypoint. |
+| `sigil validate [project_path]` | Checks your sigil definition for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
+| `sigil tree [project_path]` | Print the command structure of a sigil. |
 
 *(Note: Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management
 commands above. You alias and run `main.py`. the `sigil` prefix is a different namespace.)*

@@ -75,7 +75,7 @@
         "script": {
           "type": "string"
         },
-        "load_ignore": {
+        "load": {
           "type": "boolean"
         },
         "default": {

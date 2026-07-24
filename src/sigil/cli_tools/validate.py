@@ -11,18 +11,21 @@ class WarningCollector(logging.Handler):
     """A handler that stores all records at WARNING level or above."""
     def __init__(self):
         super().__init__()
-        self.warnings = []
+        self.messages = []
 
     def emit(self, record):
-        # Only store warnings and errors (you could also filter by level)
-        if record.levelno >= logging.WARNING:
-            self.warnings.append(record)
+        # Only store messages (you could also filter by level here)
+        if record.levelno >= logging.INFO:
+            self.messages.append(record)
 
 @contextlib.contextmanager
 def capture_package_warnings(package_name):
     """
-    Captures WARNING-level (and higher) logs from the given package tree.
+    Captures INFO-level (and higher) logs from the given package tree.
     Example: capture_package_warnings('myproject')
+    Info doesn't cause nonzero exit
+
+    Note that default loglevel is Info and is therefore not displayed by default
     """
     collector = WarningCollector()
     # Get the package root logger – children will propagate to it
@@ -87,10 +90,10 @@ def validate_project(projectroot):
         except SystemExit:  # special case to not hard exit
             pass
 
-    errors = [r for r in collector.warnings if r.levelno >= logging.ERROR]
-    warnings = [r for r in collector.warnings if r.levelno == logging.WARNING]
+    errors = [r for r in collector.messages if r.levelno >= logging.ERROR]
+    warnings = [r for r in collector.messages if r.levelno == logging.WARNING]
 
-    for rec in collector.warnings:
+    for rec in collector.messages:
         print(f"{rec.levelname}: {rec.getMessage()}", file=sys.stderr)
 
     error_count = len(errors)

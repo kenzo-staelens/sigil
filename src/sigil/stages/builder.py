@@ -25,13 +25,26 @@ class Builder:
             )
             last_default = None  # find the last default
             for _, subcommand in parser_data.subparsers.items():
-                argparser = argparse_group.add_parser(
-                    subcommand.name,
-                    help=subcommand.help,
-                    **subcommand.parser_kwargs,
-                )
+                try:
+                    argparser = argparse_group.add_parser(
+                        subcommand.name,
+                        help=subcommand.help,
+                        **subcommand.parser_kwargs,
+                    )
+                except Exception as e:
+                    _logger.error(
+                        f"unable to instantiate subcommand '{subcommand.name}'\n  {e}"
+                    )
+                    continue  # parser cannot be resqued
                 for arg in subcommand.args:
-                    cls.attach_argument(argparser, arg)
+                    try:
+                        cls.attach_argument(argparser, arg)
+                    except Exception as e:
+                        _logger.error(
+                            f"unable to attach argument {arg.name}"
+                            f"to command '{subcommand.name}'\n  {e}"
+                        )
+                        # parser valid, just some args missing
                 if subcommand.default:
                     if last_default:
                         _logger.warning(
