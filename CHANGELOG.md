@@ -1,5 +1,11 @@
 # Changelog
 
+## [UNRELEASED] - DD/MM/YYYY
+
+### Fixed
+
+- Added missing argcomplete markers in examples and `sigil init` project
+
 ## [1.4.1] - 25/07/2026
 
 ### Fixed
