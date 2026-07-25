@@ -7,7 +7,6 @@
 - Fixed a bug where datasource wasn't being respected and always reverted to yaml
 - Fixed README referring to an old parameter name
 
-
 ## [1.4.0] - 24/07/2026
 
 ### Changed
