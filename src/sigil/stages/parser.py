@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 # This class converts raw data to dataclasses
 # it takes a datasource class to interface with any desired IO
 class Parser:
-    def __init__(self, datasource: DataSource):
+    def __init__(self, datasource: type[DataSource]):
         self.datasource = datasource
 
     @classmethod

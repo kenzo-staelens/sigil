@@ -1,6 +1,14 @@
 # Changelog
 
-## [1.4.0] - DD/MM/YYYY
+## [1.4.1] - 25/07/2026
+
+### Fixed
+
+- Fixed a bug where datasource wasn't being respected and always reverted to yaml
+- Fixed README referring to an old parameter name
+
+
+## [1.4.0] - 24/07/2026
 
 ### Changed
 

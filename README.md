@@ -265,11 +265,11 @@ class JsonReader:
         ...
 
 
-run_from_config("/path/to/config", loader_class=JsonReader)
+run_from_config("/path/to/config", datasource=JsonReader)
 ```
 
 You can also pass a pre‑loaded dictionary directly by wrapping it:
 
 ```python
-run_from_config(my_dict, loader_class=DictReader)
+run_from_config(my_dict, datasource=DictReader)
 ```
