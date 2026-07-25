@@ -52,7 +52,7 @@ def test_script_loader_import_module_mock(mock_importlib, tmp_path):
     loader.import_module(str(tmp_path), "scripts", "my_script")
 
     mock_importlib.spec_from_file_location.assert_called_once_with(
-        "my_script", str(tmp_path / "scripts" / "my_script.py")
+        "scripts.my_script", str(tmp_path / "scripts" / "my_script.py")
     )
     mock_importlib.module_from_spec.assert_called_once_with(mock_spec)
     mock_spec.loader.exec_module.assert_called_once_with(mock_module)

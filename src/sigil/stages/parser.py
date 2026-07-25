@@ -11,7 +11,9 @@ _logger = logging.getLogger(__name__)
 # This class converts raw data to dataclasses
 # it takes a datasource class to interface with any desired IO
 class Parser:
-    def __init__(self, datasource: type[DataSource]):
+    def __init__(self, datasource: DataSource | type[DataSource]):
+        if isinstance(datasource, type):
+            datasource: DataSource = datasource()
         self.datasource = datasource
 
     @classmethod
@@ -28,7 +30,7 @@ class Parser:
 
     def load(
         self,
-        config_root: str,
+        config_root: str | Path,
         manifest_file='manifest.yml',
     ) -> dict[str, ParserConfig]:
         config_root_path = Path(config_root)

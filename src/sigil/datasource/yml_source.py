@@ -8,10 +8,11 @@ from .datasource import DataSource
 _logger = logging.getLogger(__name__)
 
 
+# base defines abstract as not-classmethod
+# though instantiation is not a requirement
+# if you don't need instance data, classmethods are fine too
 class YmlSource(DataSource):
-
-    @classmethod
-    def read(cls, target):
+    def read(self, target):
         try:
             with open(target) as f:
                 return yaml.load(f.read(), Loader=yaml.SafeLoader)
@@ -23,14 +24,12 @@ class YmlSource(DataSource):
             return
 
 
-    @classmethod
-    def read_manifest(cls, manifest_file: Path) -> list | None:
+    def read_manifest(self, target: Path) -> list | None:
         # indirection? yes
         # can new datasources implement a better manifest vs data? also yes
-        return cls.read(manifest_file)
+        return self.read(target)
 
 
-    @classmethod
-    def read_configuration(cls, target: Path) -> dict | None:
-        return cls.read(target)
+    def read_configuration(self, target: Path) -> dict | None:
+        return self.read(target)
 

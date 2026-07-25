@@ -2,6 +2,11 @@
 
 ## [UNRELEASED] - DD/MM/YYYY
 
+### Added
+
+- Added support for relative imports in scripts previously not working.
+- Added support for stateful datasource classes (type annotation)
+
 ### Fixed
 
 - Added missing argcomplete markers in examples and `sigil init` project

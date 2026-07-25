@@ -1,7 +1,7 @@
 from sigil.models import Argument, ArgumentGroup, LibArgParser, ParserConfig
 
 try:
-    import argcomplete  # type: ignore
+    import argcomplete
     USE_ARGCOMPLETE = True
 except Exception:
     USE_ARGCOMPLETE=False
