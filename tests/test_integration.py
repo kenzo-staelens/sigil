@@ -18,10 +18,11 @@ def test_integration_run_from_config_with_capsys(tmp_path, capsys):
     """Test run_from_config and capture output."""
     # Same setup as above
     manifest = tmp_path / "manifest.yml"
-    manifest.write_text("- root.yml\n- hello.yml\n")
+    (tmp_path/'yml').mkdir()
+    manifest.write_text("- yml/*.yml\n")
 
     root_data = {"root": {"name": "hello", "script_dir": "scripts"}}
-    (tmp_path / "root.yml").write_text(yaml.dump(root_data))
+    (tmp_path / "yml/root.yml").write_text(yaml.dump(root_data))
 
     hello_data = {
         "hello_cmd": {
@@ -31,7 +32,7 @@ def test_integration_run_from_config_with_capsys(tmp_path, capsys):
             "args": [{"name": "--name", "default": "world"}],
         }
     }
-    (tmp_path / "hello.yml").write_text(yaml.dump(hello_data))
+    (tmp_path / "yml/hello.yml").write_text(yaml.dump(hello_data))
 
     script_dir = tmp_path / "scripts"
     script_dir.mkdir()

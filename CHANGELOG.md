@@ -1,5 +1,11 @@
 # Changelog
 
+## [UNREALEASED] - DD/MM/YYYY
+
+### Added
+
+- Added glob support for manifest
+
 ## [1.4.2] - 27/07/2026
 
 ### Added
