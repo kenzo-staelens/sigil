@@ -1,6 +1,6 @@
 # Changelog
 
-## [UNRELEASED] - DD/MM/YYYY
+## [1.4.2] - 27/07/2026
 
 ### Added
 
