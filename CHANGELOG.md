@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.5.1] - 03/03/2026
+
+### Added
+
+- Added JSONSource support
+
+### Changed
+
+- Moved glob support into datasources (helper file) instead of
+  parser to include support for non filesystem-based datasources
+- Changed datasource signatures to `def ...(self, root_path: Path, target: Any)`
+  (update if you have a custom datasources)
+
+### Planned
+
+- PEP 771 to allow installing sigil-cli[] removing currently required pyyaml dependency
+
 ## [1.5.0] - 27/07/2026
 
 ### Added

@@ -11,9 +11,10 @@ _logger = logging.getLogger(__name__)
 # default to yamlloader, use whatever datastore you feel like
 def run_from_config(
         config_root: str | Path,
-        datasource: DataSource | type[DataSource] = YmlSource
+        datasource: DataSource | type[DataSource] = YmlSource,
+        manifest_target='manifest.yml',
     ) -> None:
-    raw_data = Parser(datasource).load(config_root)
+    raw_data = Parser(datasource).load(config_root, manifest_target)
     resolved = Resolver.resolve_inheritance(raw_data)
     # parser beyond here is an argparser
     parser = Builder.build(resolved)
