@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from sigil import Builder, ScriptLoader
+from sigil import Builder, FilesystemScriptSource, ScriptLoader
 
 
 def test_script_loader_get_scripts(resolved_config):
@@ -13,7 +13,10 @@ def test_script_loader_get_scripts(resolved_config):
     # data structure: we have root as ParserConfig;
     # we need to pass as dict for recursive lookup
     data = {"root": resolved_config}
-    scripts = ScriptLoader.get_scripts(args, "root", parser, data)
+    scripts = ScriptLoader(
+        None, None, FilesystemScriptSource
+    ).get_scripts(args, "root", parser, data)
+    # scripts = ScriptLoader.get_scripts(args, "root", parser, data)
 
     # The leaf script should be found
     assert "leaf_script" in scripts
@@ -32,24 +35,24 @@ def test_script_loader_import_module(tmp_path):
         "    print('Hello')\n"
     )
 
-    loader = ScriptLoader()
-    module = loader.import_module(str(tmp_path), "scripts", "my_script")
+    loader = ScriptLoader(None, None, FilesystemScriptSource)
+    module = loader.script_source.import_module(tmp_path, "scripts", "my_script")
     assert hasattr(module, "run")
     assert module is not None
     assert callable(module.run)
 
-@patch("sigil.stages.script_loader.importlib.util")
+@patch("sigil.script_sources.filesystem_script_source.importlib.util")
 def test_script_loader_import_module_mock(mock_importlib, tmp_path):
     """Test import_module with mocked importlib to avoid actual file I/O."""
     # We'll just verify it builds the correct path and calls spec_from_file_location
-    loader = ScriptLoader()
+    loader = ScriptLoader(None, None, FilesystemScriptSource)
     # We need to mock the spec and loader
     mock_spec = MagicMock()
     mock_importlib.spec_from_file_location.return_value = mock_spec
     mock_module = MagicMock()
     mock_importlib.module_from_spec.return_value = mock_module
 
-    loader.import_module(str(tmp_path), "scripts", "my_script")
+    loader.script_source.import_module(tmp_path, "scripts", "my_script")
 
     mock_importlib.spec_from_file_location.assert_called_once_with(
         "scripts.my_script", str(tmp_path / "scripts" / "my_script.py")

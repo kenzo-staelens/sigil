@@ -7,6 +7,7 @@ import yaml
 from sigil import (
     Argument,
     Builder,
+    FilesystemScriptSource,
     LibArgParser,
     ParserConfig,
     ScriptLoader,
@@ -119,6 +120,8 @@ def test_script_loader_no_subcommand(capsys):
     args = parser.parse_args([])  # no subcommand
     # get_scripts will print help and sys.exit
     with pytest.raises(SystemExit):
-        ScriptLoader.get_scripts(args, "root", parser, data)
+        ScriptLoader(
+            None, None, FilesystemScriptSource
+        ).get_scripts(args, "root", parser, data)
     captured = capsys.readouterr()
     assert "usage:" in captured.out or "usage:" in captured.err

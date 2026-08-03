@@ -2,6 +2,11 @@ from importlib.metadata import version
 
 __version__ = version('sigil-cli')
 
+from .datasource import (
+    DataSource,
+    JSONSource,
+    YmlSource,
+)
 from .entrypoint import run_from_config
 from .models import (
     Argument,
@@ -9,6 +14,10 @@ from .models import (
     LibArgParser,
     ParserConfig,
     SubcommandModule,
+)
+from .script_sources import (
+    FilesystemScriptSource,
+    ScriptSource,
 )
 from .stages import (
     Builder,
@@ -28,4 +37,9 @@ __all__ = (
     'Resolver',
     'Builder',
     'ScriptLoader',
+    'DataSource',
+    'JSONSource',
+    'YmlSource',
+    'FilesystemScriptSource',
+    'ScriptSource',
 )

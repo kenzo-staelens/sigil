@@ -1,18 +1,17 @@
-import logging
-import sys
 from pathlib import Path
 from typing import Any
 
 from .datasource import DataSource, YmlSource
+from .script_sources import FilesystemScriptSource, ScriptSource
 from .stages import Builder, Parser, Resolver, ScriptLoader
 
-_logger = logging.getLogger(__name__)
 
 # default to yamlloader, use whatever datastore you feel like
 def run_from_config(
         config_root: str | Path,
         datasource: DataSource | type[DataSource] = YmlSource,
         manifest_target='manifest.yml',
+        script_source: ScriptSource=FilesystemScriptSource  # also default to FS scripts
     ) -> None:
     raw_data = Parser(datasource).load(config_root, manifest_target)
     resolved = Resolver.resolve_inheritance(raw_data)
@@ -27,19 +26,7 @@ def run_from_config(
     else:
         args = parser.parse_args()
 
-    scripts = ScriptLoader.get_scripts(args, 'root', parser, {'root': resolved})
-    for script in scripts:
-        try:
-            module = ScriptLoader.import_module(
-                config_root,
-                resolved.script_dir,
-                script
-            )
-            if not module:
-                continue
-        except FileNotFoundError as e:
-            # prevent your subcommand from turning your environment
-            # into undefined soup by not continuing execution
-            _logger.critical(f'failed to load script "{script}"\n  {e}')
-            sys.exit(2)
-        module.run(args, execution_context)
+
+    scriptloader = ScriptLoader(config_root, resolved.script_dir, script_source)
+    scripts = scriptloader.get_scripts(args, 'root', parser, {'root': resolved})
+    scriptloader.run_scripts(scripts, args, execution_context)
