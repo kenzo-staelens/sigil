@@ -256,11 +256,11 @@ from sigil import run_from_config
 # Use JSON instead:
 class JsonReader:
     @classmethod
-    def read_manifest(cls, config_root: Path) -> list | None:
+    def read_manifest(cls, config_root: Path, target: str) -> list | None:
         # read target paths for loading configuration
         ...
     
-    def read_configuration(cls, target: Path) -> dict | None:
+    def read_configuration(cls, target: Path, target: str) -> dict | None:
         # read *.json, parse, convert to dict of raw data
         ...
 
