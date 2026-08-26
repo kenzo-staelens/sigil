@@ -1,3 +1,4 @@
+import argparse
 import contextlib
 import logging
 import sys
@@ -5,6 +6,8 @@ from pathlib import Path
 
 from sigil import Builder, Parser, Resolver
 from sigil.datasource import YmlSource
+
+from .util import registers
 
 
 # small helper to capture logs from in the guts of sigil
@@ -115,3 +118,9 @@ def validate_project(projectroot):
         sys.exit(1)
     else:
         print("Validation passed successfully.", file=sys.stderr)
+
+
+@registers('validate', 'validate structure of a sigil')
+def add_sigil_validate(command: argparse.ArgumentParser):
+    command.add_argument('path', help="project to validate")
+    return lambda args: validate_project(args.path)

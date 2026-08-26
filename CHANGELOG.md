@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.5.2] - 03/03/2026
+
+### Added
+
+- Added Support for different script sources, defaults to FileSystem
+
+### Changed
+
+- Cleaned up cli tools internal code
+- new optional parameter in run_from_config (non breaking change)
+
 ## [1.5.1] - 03/03/2026
 
 ### Added

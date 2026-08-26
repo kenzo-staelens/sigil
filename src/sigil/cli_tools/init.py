@@ -1,7 +1,9 @@
 # for everyone's sanity: not to be confused with __init__
-
+import argparse
 import sys
 from pathlib import Path
+
+from .util import registers
 
 # initial file contents
 MANIFEST="""- yml/root.yml
@@ -75,3 +77,8 @@ def create_project(project_name: str, target_dir: str = "."):
     print(f"  cd {project_name}")
     print("  python main.py hello --help")
     print("  create an alias")
+
+@registers('init', 'generate a minimal sigil')
+def add_sigil_init(command: argparse.ArgumentParser):
+    command.add_argument('name', help="project name to create")
+    return lambda args: create_project(args.name)

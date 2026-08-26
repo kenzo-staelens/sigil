@@ -3,6 +3,8 @@ import argparse
 from sigil import Builder, Parser, Resolver
 from sigil.datasource import YmlSource
 
+from .util import registers
+
 
 # adapted from https://stackoverflow.com/questions/78166654/how-can-i-print-the-tree-structure-of-subparsers-of-an-argparse-parser-in-python/78246362#78246362
 def parser_tree(
@@ -39,3 +41,8 @@ def display_project(projectroot):
     parser = Builder.build(resolved)
     print(parser_tree(parser))
 
+
+@registers('tree', 'display the command structure of a sigil.')
+def add_sigil_tree(command: argparse.ArgumentParser):
+    command.add_argument('path', help="project to validate")
+    return lambda args: display_project(args.path)
