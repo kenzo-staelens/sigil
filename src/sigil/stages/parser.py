@@ -31,7 +31,7 @@ class Parser:
     def load(
         self,
         config_root: str | Path,
-        manifest_file='manifest.yml',
+        manifest_file: str = 'manifest.yml',
     ) -> dict[str, ParserConfig]:
         config_root_path = Path(config_root)
 
