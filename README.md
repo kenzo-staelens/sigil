@@ -229,7 +229,7 @@ commands above. You alias and run `main.py`. the `sigil` prefix is a different n
 
 ### Misc
 
-`load_ignore` may be used to detaching commands from the command tree for any purpose
+`load: False` may be used to detaching commands from the command tree for any purpose
 (deprecation, development, etc) or for non schema-compliant objects at the top level of a file, this may be useful to
 define anchors or references that should not directly be read as a command.
 
