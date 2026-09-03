@@ -21,12 +21,62 @@ class Parser:
         cls,
         loaded_entry: dict[str, Any],
         loaded_config: dict[str, Any],
-        entry: str
-    ):
-        # warning: in place mutation if you decide to make changes to loaded config
+        manifest_entry: str
+    ) ->  dict[str, Any]:
+        """Handle duplicate yaml keys across multiple files.
+
+        :param loaded_entry: currently handled manifest entry
+        :type loaded_entry: dict[str, Any]
+        :param loaded_config: already loaded configurations
+        :type loaded_config: dict[str, Any]
+        :param manifest_entry: target entry as defined in manifest.yml
+        :type manifest_entry: str
+        :return: merged config
+        :rtype:  dict[str, Any]
+        """
+        # note: currently this is the warning only, there's a | elsewhere
         if duplicates := (loaded_entry.keys() & loaded_config.keys()):
             for duplicate in duplicates:
-                _logger.warning(f"{entry}[{duplicate}] already defined, ignoring")
+                _logger.warning(
+                    f"{manifest_entry} [{duplicate}] already defined, ignoring"
+                )
+        valid_entries = loaded_entry | loaded_config
+        return valid_entries
+
+    @classmethod
+    def handle_name_collisions(
+        cls,
+        loaded_config: dict[str, Any],
+        manifest_entry: str
+    ) -> dict[str, Any] :
+        """Handle name collision where two sibling commands have
+        the same argparse name parameter.
+
+        :param loaded_config: deduplicated (by key) configurations
+        :type loaded_config: dict[str, Any]
+        :param manifest_entry: target entry as defined in manifest.yml
+        :type manifest_entry: str
+        :return: validated config
+        :rtype: dict[str, Any]
+        """
+        loaded_command_names_config = set()
+        valid_entries = {}
+        for key, item in loaded_config.items():
+            if (
+                (item.get('parent', None), item.get('name', None))
+                in loaded_command_names_config
+            ):
+                _logger.warning(
+                    f"{manifest_entry} [{key}] found duplicated command "
+                    f"[{item.get('name')}] in parent command "
+                    f"[{item.get('parent', None)}], ignoring"
+                )
+            else:
+                valid_entries[key] = item
+            loaded_command_names_config.add(
+                (item.get('parent', None), item.get('name', None))
+            )
+        return valid_entries
 
     def load(
         self,
@@ -56,10 +106,11 @@ class Parser:
                     continue
                 tmp[k] = v  # pesky can't del in for loop :/
             loaded_entry = tmp
-            self.handle_duplicates(loaded_entry, loaded_config, entry)
             self.convert_args(loaded_entry)
-            # override loaded entry duplicates by already found
-            loaded_config = loaded_entry | loaded_config
+            # remove duplicates by key
+            loaded_config = self.handle_duplicates(loaded_entry, loaded_config, entry)
+            # remove sibling duplicates by parent
+            loaded_config = self.handle_name_collisions(loaded_config, entry)
 
         for k, v in loaded_config.items():
             try:

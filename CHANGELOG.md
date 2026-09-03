@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.3] - 03/03/2026
+
+### Added
+
+- Added an extra warning and validation filter for sibling commands with identical name parameters
+
 ## [1.5.2] - 03/03/2026
 
 ### Added
