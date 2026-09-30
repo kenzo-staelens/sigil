@@ -25,17 +25,25 @@ It plays nicely with `argcomplete` out of the box.
 - Declarative command hierarchies (parents, subparsers, defaults)
 - Each command can point to a dynamically imported Python script
 - `argcomplete` integration for tab‑completion
-- Pluggable data sources – YAML is the default, but JSON, TOML, or a dict are trivial to swap in
+- Pluggable data sources - YAML is the default, but JSON, a dict or custom datasource are trivial to swap in
 - No boilerplate argparse code in your main logic
 
 ## The alternatives
 
-There are plenty of established options out there. [Click](https://click.palletsprojects.com/)
-and [Typer](https://typer.tiangolo.com/) are great libraries with their own
-approaches.
+[Click](https://click.palletsprojects.com/) and [Typer](https://typer.tiangolo.com/) define commands in Python
+(decorators, type hints). Sigil
+defines the command tree as data (YAML by default; JSON or a dict work
+too, or whatever datasource you decide to wire up), and each command points to a script module loaded by name.
 
-Sigil takes a different path, focusing on reducing boilerplate while keeping
-your command structure modular and flexible.
+**Consider Sigil when** you have many subcommands, the tree changes more
+often than the logic, you want it generated or merged from several files
+or you want to stay on the standard library's argparse without the boilerplate.
+Arguments map 1:1 to argparse `add_argument` kwargs, so there's no new API
+to learn, and `sigil validate` / `sigil tree` help you check the config.
+
+**Stick with Click or Typer when** you have a small app, want type-hint
+driven arguments (`type:` here only supports Python builtins), or need their
+ecosystem and plugins.
 
 ## Quick Start
 
@@ -56,7 +64,7 @@ cd demo
 python main.py --help
 ```
 
-For a full walkthrough with custom commands and arguments, jump to the Quick Start below.
+For a full walkthrough with custom commands and arguments, see steps 0-4 below.
 
 ### 0. Recommended file structure
 
@@ -73,7 +81,9 @@ project_root/
     └── ...               # other scripts
 ```
 
-ps: don't shoot yourself in the foot, don't symlink the bootstrap script.
+> [!Important]
+> Don't shoot yourself in the foot, don't symlink the bootstrap script.
+> if using a venv remember to use/alias the right python runtime
 
 ### 1. Entry script
 
@@ -176,7 +186,7 @@ Parser (multi-)inheritance isn't supported but can be emulated by adding argumen
 
 ### Argument
 
-Each argument entry can be a plain dict which maps 1-to-1 with argparse `add_argument`, except name which maps it's `*args`
+Each argument entry can be a plain dict which maps 1-to-1 with argparse `add_argument`, except name which maps its `*args`
 
 ```yaml
 - name: ["-p", "--port"]   # or a single string, e.g. "positional"
@@ -185,7 +195,7 @@ Each argument entry can be a plain dict which maps 1-to-1 with argparse `add_arg
   help: "port number"
 ```
 
-Groups and mutex groups are also suppored via the "kind" parameter (defaults to `argument`)
+Groups and mutex groups are also supported via the "kind" parameter (defaults to `argument`)
 
 ```yaml
 # mutex group
@@ -202,17 +212,16 @@ Groups and mutex groups are also suppored via the "kind" parameter (defaults to 
 The `name` field can be `--flag` for flags or a string for positional arguments.
 Both literal string and list of strings are supported.
 
-Types (`type:`) only supports python builtins
+Types (`type:`) only support Python builtins
 
 ### Script files
 
-Each script files have as only requirement that they need to define a
-`def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None` method.
+Each script file must define a `def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None` method.
 
-args is the by argparse supplied namespace (parsed with parse_known_args), any additional args can be found in `ctx['other_args']`
+Args is the namespace supplied by argparse (parsed with parse_known_args). Any additional args can be found in `ctx['other_args']`.
 
-scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to,
-remove or otherwise modify args.namespace and ctx to enrich or modify the behaviour of supsequent scripts.
+Scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to,
+remove or otherwise modify `args` and `ctx` to enrich or modify the behaviour of subsequent scripts.
 
 ## Sigil CLI Commands
 
@@ -224,13 +233,14 @@ remove or otherwise modify args.namespace and ctx to enrich or modify the behavi
 | `sigil validate [project_path]` | Checks your sigil definition for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
 | `sigil tree [project_path]` | Print the command structure of a sigil. |
 
-*(Note: Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management
-commands above. You alias and run `main.py`. the `sigil` prefix is a different namespace.)*
+> [!NOTE]
+> Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management
+> commands above. You alias and run `main.py`. The `sigil` prefix is a different namespace.
 
 ### Misc
 
-`load: False` may be used to detaching commands from the command tree for any purpose
-(deprecation, development, etc) or for non schema-compliant objects at the top level of a file, this may be useful to
+`load: False` may be used to detach commands from the command tree for any purpose
+(deprecation, development, etc) or for non schema-compliant objects at the top level of a file. This may be useful to
 define anchors or references that should not directly be read as a command.
 
 ## Tab‑Completion (argcomplete)
@@ -244,23 +254,23 @@ pip install argcomplete
 activate-global-python-argcomplete
 ```
 
-Then run your script and hit <kbd>Tab</kbd> – subcommands and flags will complete.
+Then run your script and hit <kbd>Tab</kbd> - subcommands and flags will complete.
 
 ## Pluggable Backends
 
-Sigil uses yaml by default, but you can supply any datasource that we can convert it's output into `ParserConfig`:
+Sigil uses YAML by default, but you can supply any datasource whose output can be converted into `ParserConfig`:
 
 ```python
 from sigil import run_from_config
+from pathlib import Path
 
 # Use JSON instead:
 class JsonReader:
-    @classmethod
-    def read_manifest(cls, config_root: Path, target: str) -> list | None:
+    def read_manifest(self, root_path: Path, target: str) -> list | None:
         # read target paths for loading configuration
         ...
     
-    def read_configuration(cls, target: Path, target: str) -> dict | None:
+    def read_configuration(self, root_path: Path, target: str) -> dict | None:
         # read *.json, parse, convert to dict of raw data
         ...
 
@@ -271,5 +281,6 @@ run_from_config("/path/to/config", datasource=JsonReader)
 You can also pass a pre‑loaded dictionary directly by wrapping it:
 
 ```python
+# exact dictreader implementation deliberately omitted
 run_from_config(my_dict, datasource=DictReader)
 ```
