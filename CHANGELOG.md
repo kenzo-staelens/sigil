@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.4] - 02/10/2026
+
+### Added
+
+- Added support for sigil cli tools to use other datasources than default YmlSource
+- Added proper cli_tools autodiscovery
+- Added support for injecting custom datasources into cli tools via
+  `sigil.datasource.REAL_SOURCES: str[dict, type[DataSource]]`
+
+### Fixed
+
+- Fixed documentation drift in README
+- Fixed import errors when default yaml(/ymlsource) missing
+
 ## [1.5.3] - 03/03/2026
 
 ### Added

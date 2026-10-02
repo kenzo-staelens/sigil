@@ -9,7 +9,6 @@ from .helper import _expandpath
 
 _logger = logging.getLogger(__name__)
 
-
 # base defines abstract as not-classmethod
 # though instantiation is not a requirement
 # if you don't need instance data, classmethods are fine too

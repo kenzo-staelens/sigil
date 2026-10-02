@@ -1,6 +1,10 @@
+# CLI_NO_IMPORT
 import argparse
 import functools
+import sys
 from collections.abc import Callable
+
+from sigil.datasource import DataSource
 
 COMMAND_REGISTRY: 'dict[str, Callable[[argparse.Namespace]]]' = {}
 REGISTER_CALLABLES = []
@@ -22,3 +26,11 @@ def registers(name: str, cmd_help: str):
         REGISTER_CALLABLES.append(wrapper)
         return wrapper
     return decorator_fn
+
+def get_datasource(name: str) -> type[DataSource]:
+    from sigil.datasource import REAL_SOURCES
+    if name not in REAL_SOURCES:
+        # if you somehow manage to get here
+        print(f'could not determine datasource {name}')
+        sys.exit()
+    return REAL_SOURCES.get(name)

@@ -5,8 +5,13 @@ __version__ = version('sigil-cli')
 from .datasource import (
     DataSource,
     JSONSource,
-    YmlSource,
 )
+
+try:
+    from .datasource import YmlSource  # noqa: F401
+    yml_ok = True
+except ImportError:
+    yml_ok = False
 from .entrypoint import run_from_config
 from .models import (
     Argument,
@@ -26,7 +31,7 @@ from .stages import (
     ScriptLoader,
 )
 
-__all__ = (
+__all__ = [
     'run_from_config',
     'Argument',
     'ArgumentGroup',
@@ -39,7 +44,9 @@ __all__ = (
     'ScriptLoader',
     'DataSource',
     'JSONSource',
-    'YmlSource',
     'FilesystemScriptSource',
     'ScriptSource',
-)
+]
+
+if yml_ok:
+    __all__.append('YmlSource')

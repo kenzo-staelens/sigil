@@ -30,6 +30,7 @@ class ParserConfig:
     # anything not already in here
     parser_kwargs: dict[str, Any] = field(default_factory=dict)
     load: bool = True
+    requirements: list[str] = field(default_factory=list)  # pip requirements
 
     @classmethod
     def factory(cls, **kwargs):

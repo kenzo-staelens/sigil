@@ -168,6 +168,9 @@ chmod +x mycli.py
 | `name` | Program name (used as `prog` in argparse) |
 | `script_dir` | Directory (relative to the config root) where command scripts are located |
 
+> [!NOTE]
+> this section contains only sigil-specific configurations, other argparse arguments still apply
+
 ### Command
 
 | Field | Description |
@@ -179,10 +182,16 @@ chmod +x mycli.py
 | `args` | List of argument definitions (see below) |
 | `default` | If `True`, this subcommand is used when no subcommand is given |
 | `load` | If `False` skips this command (or top level object) from being loaded into the command tree (default `True`) |
+| `requirements` | (Optional) List of pip requirements that this subcommand requires. |
 | any other parser kwarg | except for `dest`, `parents` and `formatter_class` they are all supported |
 
-Note that `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree.
-Parser (multi-)inheritance isn't supported but can be emulated by adding arguments to `parent` commands in the tree.
+> [!NOTE]
+> this section contains only sigil-specific configurations, other argparse arguments still apply
+<!---->
+> [!IMPORTANT]
+> `parent` does not refer to argparse's `parents` parameter but is only used to resolve the parser tree.
+> Parser (multi-)inheritance isn't supported but can be (rougly) emulated by
+> adding arguments to `parent` commands in the tree.
 
 ### Argument
 
@@ -230,8 +239,9 @@ remove or otherwise modify `args` and `ctx` to enrich or modify the behaviour of
 | Command | Purpose |
 | --- | --- |
 | `sigil init [project_name]` | Creates a new project folder with a sample ready-to-run Python entrypoint. |
-| `sigil validate [project_path]` | Checks your sigil definition for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
-| `sigil tree [project_path]` | Print the command structure of a sigil. |
+| `sigil validate [project_path, default '.']` | Checks your sigil definition for schema errors and missing references. Run this after heavy edits to catch mistakes early. |
+| `sigil tree [project_path, default '.']` | Print the command structure of a sigil. |
+| `sigil requirements [project_path, default '.']` | Generate a requirements.txt file from active subcommands in the sigil. |
 
 > [!NOTE]
 > Your generated CLI (the one you build with Sigil) is completely separate from the `sigil` management

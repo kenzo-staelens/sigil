@@ -1,7 +1,14 @@
 from pathlib import Path
 from typing import Any
 
-from .datasource import DataSource, YmlSource
+from .datasource import DataSource, JSONSource
+
+try:
+    from .datasource import YmlSource
+    yml_ok = True
+except ImportError:
+    yml_ok = False
+    pass
 from .script_sources import FilesystemScriptSource, ScriptSource
 from .stages import Builder, Parser, Resolver, ScriptLoader
 
@@ -9,7 +16,10 @@ from .stages import Builder, Parser, Resolver, ScriptLoader
 # default to yamlloader, use whatever datastore you feel like
 def run_from_config(
         config_root: str | Path,
-        datasource: DataSource | type[DataSource] = YmlSource,
+        datasource: DataSource | type[DataSource] = (
+            # default to ymlsource if can import
+            JSONSource if not yml_ok else YmlSource
+        ),
         manifest_target='manifest.yml',
         script_source: ScriptSource=FilesystemScriptSource  # also default to FS scripts
     ) -> None:

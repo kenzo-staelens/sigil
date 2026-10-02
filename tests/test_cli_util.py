@@ -12,7 +12,7 @@ def test_cli_util(
     parser.add_argument('--version', action='version', version='Sigil x.x.x')
     sub = parser.add_subparsers(title="subcommands", dest='command')
 
-    assert len(REGISTER_CALLABLES) == 3
+    assert len(REGISTER_CALLABLES) == 4
     for fn in REGISTER_CALLABLES:
         fn(sub)
 
