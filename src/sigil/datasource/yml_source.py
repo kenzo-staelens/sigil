@@ -1,5 +1,6 @@
 import itertools
 import logging
+import sys
 from pathlib import Path
 
 import yaml
@@ -20,10 +21,10 @@ class YmlSource(DataSource):
                 return yaml.load(f.read(), Loader=yaml.SafeLoader)
         except FileNotFoundError:
             _logger.error(f"file '{target}' not found")
-            return
+            sys.exit(1)
         except yaml.error.YAMLError as e:
             _logger.error(f"malformed yaml file ({target})\n  {e}")
-            return
+            sys.exit(1)
 
 
     def read_manifest(self, root_path: Path, filename: str) -> list | None:

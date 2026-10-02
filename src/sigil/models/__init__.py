@@ -4,9 +4,9 @@ from .command import ParserConfig
 from .script import SubcommandModule
 
 __all__ = [
-    Argument,
-    ArgumentGroup,
-    LibArgParser,
-    ParserConfig,
-    SubcommandModule
+    'Argument',
+    'ArgumentGroup',
+    'LibArgParser',
+    'ParserConfig',
+    'SubcommandModule'
 ]

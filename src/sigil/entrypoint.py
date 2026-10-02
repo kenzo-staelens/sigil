@@ -6,7 +6,7 @@ from .datasource import DataSource, JSONSource
 try:
     from .datasource import YmlSource
     yml_ok = True
-except ImportError:
+except (ImportError, ModuleNotFoundError):
     yml_ok = False
     pass
 from .script_sources import FilesystemScriptSource, ScriptSource

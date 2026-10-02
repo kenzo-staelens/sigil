@@ -1,6 +1,7 @@
 import itertools
 import json
 import logging
+import sys
 from pathlib import Path
 
 from .datasource import DataSource
@@ -21,10 +22,10 @@ class JSONSource(DataSource):
                 # return yaml.load(f.read(), Loader=yaml.SafeLoader)
         except FileNotFoundError:
             _logger.error(f"file '{target}' not found")
-            return
+            sys.exit(1)
         except json.JSONDecodeError as e:
             _logger.error(f"malformed json file ({target})\n  {e}")
-            return
+            sys.exit(1)
 
 
     def read_manifest(self, root_path: Path, filename: str) -> list | None:

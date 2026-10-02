@@ -20,6 +20,6 @@ try:
     # any datasources with dependencies should import like this
     from .yml_source import YmlSource  # noqa: F401
     REAL_SOURCES['YmlSource'] = YmlSource  # known not abstract
-    __all__.insert(0, 'YmlSource')
-except ImportError:
+    __all__.append('YmlSource')
+except (ImportError, ModuleNotFoundError):
     pass

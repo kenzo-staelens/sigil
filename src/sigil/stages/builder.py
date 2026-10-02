@@ -41,8 +41,8 @@ class Builder:
                         cls.attach_argument(argparser, arg)
                     except Exception as e:
                         _logger.error(
-                            f"unable to attach argument {arg.name}"
-                            f"to command '{subcommand.name}'\n  {e}"
+                            f"unable to attach argument {getattr(arg,'name', '?')} "
+                            f"to command '{getattr(subcommand, 'name', '?')}'\n  {e}"
                         )
                         # parser valid, just some args missing
                 if subcommand.default:

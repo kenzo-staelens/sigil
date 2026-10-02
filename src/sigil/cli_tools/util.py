@@ -32,5 +32,5 @@ def get_datasource(name: str) -> type[DataSource]:
     if name not in REAL_SOURCES:
         # if you somehow manage to get here
         print(f'could not determine datasource {name}')
-        sys.exit()
+        sys.exit(1)
     return REAL_SOURCES.get(name)

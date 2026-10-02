@@ -44,15 +44,19 @@ _logger = logging.getLogger(__name__)
 
 
 # actual validation logging
-def _validate_project(projectroot, datasource_name='YmlSource'):
+def _validate_project(
+    projectroot,
+    datasource_name='YmlSource',
+    manifest_filename='manifest.yml'
+):
     projectpath = Path(projectroot)
 
-    if not (projectpath/'manifest.yml').exists():
-        _logger.error('missing manifest.yml, aborting.')
+    if not (projectpath/manifest_filename).exists():
+        _logger.error('missing manifest, aborting.')
         sys.exit(1)
 
     datasource = get_datasource(datasource_name)
-    raw = Parser(datasource).load(projectroot)
+    raw = Parser(datasource).load(projectroot, manifest_filename)
 
     # these are easier for us to check
     if 'root' not in raw:
@@ -86,11 +90,19 @@ def _validate_project(projectroot, datasource_name='YmlSource'):
 # exit code wrapper
 # validation partially happens deep in the guts of sigil,
 # this caputures all validation logs, counts and converts to exit code
-def validate_project(projectroot, datasource_name='YmlSource'):
+def validate_project(
+    projectroot,
+    datasource_name='YmlSource',
+    manifest_filename='manifest.yml'
+):
     package_name = __name__.split('.', 1)[0]
     with capture_package_warnings(package_name) as collector:
         try:
-            _validate_project(projectroot, datasource_name)
+            _validate_project(
+                projectroot,
+                datasource_name,
+                manifest_filename
+            )
         except SystemExit:  # special case to not hard exit
             pass
 
@@ -128,4 +140,9 @@ def add_sigil_validate(command: argparse.ArgumentParser):
         nargs='?',
         default='.',
     )
-    return lambda args: validate_project(args.path, args.datasource)
+    command.add_argument(
+        '--manifest',
+        help="manifest filename, default 'manifest.yml'",
+        default='manifest.yml'
+    )
+    return lambda args: validate_project(args.path, args.datasource, args.manifest)

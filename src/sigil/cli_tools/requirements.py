@@ -19,7 +19,7 @@ def resolve_requirements(projectroot, datasource_name='YmlSource'):
         if not isinstance(parsed_data.requirements, list):
             print(
                 f'requirements for {parsed_data.name}[{key}]'
-                'not in list format, ignoring...'
+                ' not in list format, ignoring...'
             )
             continue # invalid format
         reqs_list += ['',f'# {key}']
@@ -35,7 +35,7 @@ def add_sigil_requirements(command: argparse.ArgumentParser):
         default='.'
     )
     command.add_argument(
-        '--out',
+        '--outfile',
         '-o',
         help="outfile",
         default='requirements.txt',

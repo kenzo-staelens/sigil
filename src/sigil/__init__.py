@@ -10,7 +10,7 @@ from .datasource import (
 try:
     from .datasource import YmlSource  # noqa: F401
     yml_ok = True
-except ImportError:
+except (ImportError, ModuleNotFoundError):
     yml_ok = False
 from .entrypoint import run_from_config
 from .models import (

@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.5.5] - 02/10/2026
+
+### Added
+
+- Added `--manifest` option to `sigil validate` to validate projects with a
+  manifest not named `manifest.yml`
+
+### Changed
+
+- YmlSource and JSONSource now abort with exit code 1 when a configuration or
+  manifest file is missing or malformed, instead of skipping it
+  (update if you rely on the previous behaviour in custom code)
+- `sigil` cli tools now exit with code 1 (was 0) when an unknown datasource is given
+- Renamed/fixed `sigil requirements --out` to `--outfile` (`-o` unchanged)
+
+### Fixed
+
+- Fixed `sigil requirements` crashing with an `AttributeError`
+- Fixed `from sigil.models import *` raising a `TypeError`
+- Fixed explicit `kind: argument` on an argument raising a `TypeError` in argparse
+- Fixed the argument error message in the builder crashing for argument groups
+- Fixed dates on previous changelogs
+
 ## [1.5.4] - 02/10/2026
 
 ### Added
@@ -14,13 +37,13 @@
 - Fixed documentation drift in README
 - Fixed import errors when default yaml(/ymlsource) missing
 
-## [1.5.3] - 03/03/2026
+## [1.5.3] - 03/08/2026
 
 ### Added
 
 - Added an extra warning and validation filter for sibling commands with identical name parameters
 
-## [1.5.2] - 03/03/2026
+## [1.5.2] - 03/08/2026
 
 ### Added
 
@@ -31,7 +54,7 @@
 - Cleaned up cli tools internal code
 - new optional parameter in run_from_config (non breaking change)
 
-## [1.5.1] - 03/03/2026
+## [1.5.1] - 03/08/2026
 
 ### Added
 
