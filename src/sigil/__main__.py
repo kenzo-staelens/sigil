@@ -1,5 +1,11 @@
 import argparse
 
+try:
+    import argcomplete
+    USE_ARGCOMPLETE = True
+except ImportError:
+    USE_ARGCOMPLETE = False
+
 from sigil import __version__
 from sigil.cli_tools.util import COMMAND_REGISTRY, REGISTER_CALLABLES
 from sigil.datasource import REAL_SOURCES
@@ -17,6 +23,8 @@ def main():
     sub = parser.add_subparsers(title="subcommands", dest='command')
     for fn in REGISTER_CALLABLES:
         fn(sub)
+    if USE_ARGCOMPLETE:
+        argcomplete.autocomplete(parser)
 
     args = parser.parse_args()
     if args.command not in COMMAND_REGISTRY:

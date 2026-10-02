@@ -6,6 +6,7 @@
 
 - Added `--manifest` option to `sigil validate` to validate projects with a
   manifest not named `manifest.yml`
+- Added autocomplete to sigil tools (if argcomplete installed)
 
 ### Changed
 

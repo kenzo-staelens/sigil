@@ -39,8 +39,9 @@ Homepage = "https://github.com/kenzo-staelens/sigil"
 Repository = "https://github.com/kenzo-staelens/sigil"
 Issues = "https://github.com/kenzo-staelens/sigil/issues"
 
-[project.scripts]
-sigil = "sigil.__main__:main"
+[tool.setuptools]
+script-files = ['_install/sigil']
+# sigil = "sigil.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
