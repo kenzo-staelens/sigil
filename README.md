@@ -167,6 +167,7 @@ chmod +x mycli.py
 | --- | --- |
 | `name` | Program name (used as `prog` in argparse) |
 | `script_dir` | Directory (relative to the config root) where command scripts are located |
+| `known_args` | Whether to use `parse_known_args` (`true`) or `parse_args` (`false`), default `false` |
 
 > [!NOTE]
 > this section contains only sigil-specific configurations, other argparse arguments still apply
@@ -227,7 +228,8 @@ Types (`type:`) only support Python builtins
 
 Each script file must define a `def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None` method.
 
-Args is the namespace supplied by argparse (parsed with parse_known_args). Any additional args can be found in `ctx['other_args']`.
+Args is the namespace supplied by argparse (parsed with `parse_args`/`parse_known_args`).
+Any additional args can be found in `ctx['other_args']` when using `parse_known_args`.
 
 Scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to,
 remove or otherwise modify `args` and `ctx` to enrich or modify the behaviour of subsequent scripts.
