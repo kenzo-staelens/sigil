@@ -140,7 +140,7 @@ import argparse
 from typing import Any
 
 def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None:
-    port = getattr(args, "port", 8080)
+    port = getattr(args, "port", 8080) or 8080
     port = find_next_free_port_logic(port)
     print(f"Running container on port {port}")
 ```

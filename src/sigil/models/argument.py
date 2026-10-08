@@ -58,11 +58,13 @@ class Argument:
 
     @classmethod
     def factory(cls, **kwargs: dict[str, Any]) -> 'Argument | ArgumentGroup':
-        kind = kwargs.pop('kind', 'argument')  # default to argument
+        kind = kwargs.get('kind', 'argument')
         if kind not in ALLOWED_KINDS:
             raise ValueError(f'invalid kind {kind}')
         if kind in AGGREGATE_TYPES:
             return ArgumentGroup.factory(**kwargs)
+        if 'kind' in kwargs:
+            del kwargs['kind']  # fix explicit "kind: argument"
         name = kwargs.get('name')
         if isinstance(name, str):
             kwargs['name'] = [name] # type: ignore

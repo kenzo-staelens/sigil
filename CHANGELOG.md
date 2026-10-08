@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.6] - 02/10/2026
+
+### Added
+
+- Fixed another bug where mutexgroups stopped working
+
 ## [1.5.5] - 02/10/2026
 
 ### Added
