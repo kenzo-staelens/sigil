@@ -8,6 +8,7 @@ except Exception:
 import logging
 from typing import Any
 
+COMMAND_DEST_FMT='_sigil_internal_%s'
 _logger = logging.getLogger(__name__)
 
 class Builder:
@@ -20,7 +21,7 @@ class Builder:
     ) -> None:
         if parser_data.subparsers:
             argparse_group = base_parser.add_subparsers(
-                dest=parser_data.name,
+                dest=COMMAND_DEST_FMT % parser_data.name,
                 title='subcommands',
             )
             last_default = None  # find the last default

@@ -50,7 +50,7 @@ def test_builder_default_subparser():
     # The default subparser should be 'foo'
     # We can test by parsing with no subcommand: it should fallback to foo
     args = parser.parse_args([])
-    assert args.mycli == "foo"  # dest is the parent name
+    assert args._sigil_internal_mycli == "foo"  # dest is the parent name
 
 
 def test_argument_group_factory():

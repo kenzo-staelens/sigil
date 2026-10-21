@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] - 21/10/2026
+
+### Changed
+
+- renamed internal routing of subcommands to `_sigil_internal_%s` from raw command name
+  to accomodata cases where command group and argument share a name
+
 ## [1.5.6] - 02/10/2026
 
 ### Added

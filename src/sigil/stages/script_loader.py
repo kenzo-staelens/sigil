@@ -6,6 +6,8 @@ from pathlib import Path
 from sigil.models import LibArgParser, ParserConfig
 from sigil.script_sources import ScriptSource
 
+from .builder import COMMAND_DEST_FMT
+
 _logger = logging.getLogger(__name__)
 
 class ScriptLoader:
@@ -25,13 +27,15 @@ class ScriptLoader:
         # get the name of the next subcommand
         if target != 'root':
             # normal case a subcommand just points to the next arg
-            next_value = getattr(args, target)
+            # next_value = getattr(args, target)
+            _target = COMMAND_DEST_FMT % target
         else:
             # root is a special case because the top level parser
             # is required to be called root (id, not name parameter)
             # therefore root needs to grab the next part by name instead
-            next_value = getattr(args, parser.name)
-        return next_value
+            _target = COMMAND_DEST_FMT % parser.name
+            # next_value = getattr(args, parser.name)
+        return getattr(args, _target)
 
     def get_scripts(
         cls,

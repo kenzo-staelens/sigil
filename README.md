@@ -184,7 +184,7 @@ chmod +x mycli.py
 | `default` | If `True`, this subcommand is used when no subcommand is given |
 | `load` | If `False` skips this command (or top level object) from being loaded into the command tree (default `True`) |
 | `requirements` | (Optional) List of pip requirements that this subcommand requires. |
-| any other parser kwarg | except for `dest`, `parents` and `formatter_class` they are all supported |
+| any other parser kwarg | except for `dest` (on command groups), `parents` and `formatter_class` they are all supported |
 
 > [!NOTE]
 > this section contains only sigil-specific configurations, other argparse arguments still apply
@@ -233,6 +233,9 @@ Any additional args can be found in `ctx['other_args']` when using `parse_known_
 
 Scripts run in sequence from command -> subcommand -> sub sub command -> ... and each may add to,
 remove or otherwise modify `args` and `ctx` to enrich or modify the behaviour of subsequent scripts.
+
+You are still able to reference each subcommand from args via `args._sigil_internal_<command_name>`
+(`command_name` being the "name" parameter of your command, not it's key).
 
 ## Sigil CLI Commands
 
