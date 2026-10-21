@@ -1,57 +1,11 @@
 # for everyone's sanity: not to be confused with __init__
 import argparse
 import sys
+from importlib.resources import files
 from pathlib import Path
 
 from .util import registers
 
-# initial file contents
-MANIFEST="""- yml/root.yml
-"""
-
-BOOTSTRAP = """#!/usr/bin/env python3
-# PYTHON_ARGCOMPLETE_OK
-from pathlib import Path
-
-from sigil import run_from_config
-
-if __name__ == "__main__":
-    run_from_config(Path(__file__).parent)
-"""
-
-YML_ROOT = """
-root:
-  name: {}
-  script: root
-  script_dir: scripts
-  args:
-    - name: name
-      help: your name
-    - name: --shout
-      action: store_true
-      help: Increase volume
-    - name:
-        - --verbose
-        - -v
-      action: store_true
-      help: increase verbosity
-""".lstrip()
-
-SCRIPT_ROOT = """
-import argparse
-from typing import Any
-
-
-def run(args: argparse.Namespace, ctx: dict[str, Any]) -> None:
-    message = f'hello {args.name}!'
-    if args.shout:
-        message = message.upper()
-
-    print(message)
-
-    if args.verbose:
-        print("[DEBUG] Verbose mode enabled")
-""".lstrip()
 
 def create_project(project_name: str, target_dir: str = "."):
     """Scaffold a new Sigil project."""
@@ -67,10 +21,17 @@ def create_project(project_name: str, target_dir: str = "."):
     yml_path.mkdir(parents=True, exist_ok=False)
     scripts_path.mkdir(parents=True, exist_ok=False)
 
-    (base_path / "manifest.yml").write_text(MANIFEST)
-    (base_path / "main.py").write_text(BOOTSTRAP)
-    (yml_path / "root.yml").write_text(YML_ROOT.format(project_name))
-    (scripts_path / "root.py").write_text(SCRIPT_ROOT)
+    bootstrap_info: list[tuple[Path, str, tuple]] = [
+        (base_path, 'manifest.yml', (project_name,)),
+        (base_path, 'main.py', ()),
+        (yml_path, 'root.yml', (project_name,)),
+        (scripts_path, 'root.py', ()),
+    ]
+
+    tpl = files("sigil.cli_tools.templates")
+    for (_target_dir, target_file, fmt) in bootstrap_info:
+        tpl_content = tpl.joinpath(target_file+'.tpl').read_text().format(*fmt)
+        (_target_dir / target_file).write_text(tpl_content)
 
     print(f"Initialized new Sigil project in ./{project_name}")
     print("Next steps:")

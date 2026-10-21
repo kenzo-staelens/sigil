@@ -2,6 +2,7 @@ import itertools
 import json
 import logging
 import sys
+import warnings
 from pathlib import Path
 
 from .datasource import DataSource
@@ -32,6 +33,14 @@ class JSONSource(DataSource):
         # indirection? yes
         # can new datasources implement a better manifest vs data? also yes
         raw_manifest = self.read(root_path, filename)
+        if isinstance(raw_manifest, list):
+            warnings.warn(
+               "Legacy-style manifests are deprecated since 1.6.0 "
+               "and will be removed in a future release.",
+               FutureWarning,
+               stacklevel=2,
+            )
+            raw_manifest = {'include': raw_manifest}
         res_manifest = []
         for line in raw_manifest:
             res_manifest = itertools.chain(

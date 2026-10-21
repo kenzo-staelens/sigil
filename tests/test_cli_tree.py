@@ -16,9 +16,10 @@ def test_parser_tree_with_subcommands(
 
     manifest = project_root / "manifest.yml"
     manifest.write_text("""
-- root.yml
-- foo.yml
-- bar.yml
+include:
+  - root.yml
+  - foo.yml
+  - bar.yml
 """)
 
     root_yml = project_root / "root.yml"

@@ -32,7 +32,11 @@ def test_yaml_reader_load(tmp_path, sample_manifest):
 def test_yaml_reader_duplicate_warning(caplog, tmp_path):
     """Test that duplicate keys trigger a warning and the later file overrides."""
     manifest = tmp_path / "manifest.yml"
-    manifest.write_text("- a.yml\n- b.yml\n")
+    manifest.write_text("""
+include:
+    - a.yml
+    - b.yml
+""")
 
     a_data = {"cmd": {"name": "cmd", "help": "from a"}}
     b_data = {"cmd": {"name": "cmd", "help": "from b"}}  # same key
@@ -50,7 +54,7 @@ def test_yaml_reader_duplicate_warning(caplog, tmp_path):
 def test_yaml_reader_invalid_arg(caplog, tmp_path):
     """Test that invalid argument definitions are skipped."""
     manifest = tmp_path / "manifest.yml"
-    manifest.write_text("- cmd.yml\n")
+    manifest.write_text("include:\n    - cmd.yml")
 
     cmd_data = {
         "cmd": {
@@ -72,7 +76,7 @@ def test_yaml_reader_invalid_arg(caplog, tmp_path):
 
 def test_invalid_parser(caplog, tmp_path):
     manifest = tmp_path / "manifest.yml"
-    manifest.write_text("- cmd.yml\n")
+    manifest.write_text("include:\n    - cmd.yml")
 
     cmd_data = {
         "cmd": {

@@ -25,7 +25,11 @@ def sample_manifest(tmp_path):
     }
 
     manifest_path = tmp_path / "manifest.yml"
-    manifest_path.write_text("- root.yml\n- sub.yml\n")
+    manifest_path.write_text("""
+include:
+    - root.yml
+    - sub.yml
+""")
 
     (tmp_path / "root.yml").write_text(yaml.dump(root_yml))
     (tmp_path / "sub.yml").write_text(yaml.dump(sub_yml))

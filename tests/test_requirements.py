@@ -20,7 +20,7 @@ def _handler_wrapper():
 
 def _write_project(project_root: Path, extra: str = "") -> None:
     """Minimal valid Sigil project: root + optional extra commands."""
-    (project_root / "manifest.yml").write_text("- all.yml\n")
+    (project_root / "manifest.yml").write_text("include:\n    - all.yml\n")
     (project_root / "all.yml").write_text(
         "root:\n"
         "  name: mycli\n"

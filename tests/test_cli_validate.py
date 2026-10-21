@@ -16,7 +16,7 @@ def test_validate_project_success(
     project_root.mkdir()
 
     manifest = project_root / "manifest.yml"
-    manifest.write_text("- root.yml\n")
+    manifest.write_text("include:\n    - root.yml\n")
 
     root_yml = project_root / "root.yml"
     root_yml.write_text("""
@@ -56,7 +56,7 @@ def test_validate_project_missing_root_key(
     project_root.mkdir()
 
     manifest = project_root / "manifest.yml"
-    manifest.write_text("- root.yml\n")
+    manifest.write_text("include:\n    - root.yml\n")
 
     root_yml = project_root / "root.yml"
     root_yml.write_text("""
@@ -79,7 +79,7 @@ def test_validate_project_missing_script_dir(
     project_root.mkdir()
 
     manifest = project_root / "manifest.yml"
-    manifest.write_text("- root.yml\n")
+    manifest.write_text("include:\n    - root.yml\n")
 
     root_yml = project_root / "root.yml"
     root_yml.write_text("""
@@ -106,8 +106,9 @@ def test_validate_project_missing_help_text(
 
     manifest = project_root / "manifest.yml"
     manifest.write_text("""
-- root.yml
-- greet.yml
+include:
+    - root.yml
+    - greet.yml
 """)
 
     root_yml = project_root / "root.yml"
@@ -147,8 +148,9 @@ def test_validate_project_missing_script_file(
 
     manifest = project_root / "manifest.yml"
     manifest.write_text("""
-- root.yml
-- greet.yml
+include:
+    - root.yml
+    - greet.yml
 """)
 
     root_yml = project_root / "root.yml"
@@ -188,8 +190,9 @@ def test_validate_project_script_without_script_dir(
 
     manifest = project_root / "manifest.yml"
     manifest.write_text("""
-- root.yml
-- greet.yml
+include:
+    - root.yml
+    - greet.yml
 """)
 
     root_yml = project_root / "root.yml"
@@ -225,9 +228,10 @@ def test_validate_project_multiple_default_subcommands(
 
     manifest = project_root / "manifest.yml"
     manifest.write_text("""
-- root.yml
-- foo.yml
-- bar.yml
+include:
+    - root.yml
+    - foo.yml
+    - bar.yml
 """)
 
     root_yml = project_root / "root.yml"

@@ -1,6 +1,7 @@
 import itertools
 import logging
 import sys
+import warnings
 from pathlib import Path
 
 import yaml
@@ -28,17 +29,23 @@ class YmlSource(DataSource):
 
 
     def read_manifest(self, root_path: Path, filename: str) -> list | None:
-        # indirection? yes
-        # can new datasources implement a better manifest vs data? also yes
+        # indirection? yes but it's a better interface
         raw_manifest = self.read(root_path, filename)
+        if isinstance(raw_manifest, list):
+            warnings.warn(
+               "Legacy-style manifests are deprecated since 1.6.0 "
+               "and will be removed in a future release.",
+               FutureWarning,
+               stacklevel=2,
+            )
+            raw_manifest = {'include': raw_manifest}
         res_manifest = []
-        for line in raw_manifest:
+        for line in raw_manifest.get('include', []):
             res_manifest = itertools.chain(
                 res_manifest,
                 _expandpath(root_path, Path(line))
             )
         return res_manifest
-
 
     def read_configuration(self, root_path: Path, filename: str) -> dict | None:
         return self.read(root_path, filename)

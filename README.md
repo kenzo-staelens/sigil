@@ -104,9 +104,15 @@ if __name__ == "__main__":
 List all your YAML definitions in `manifest.yml`:
 
 ```yaml
-- root.yml
-- root_run.yml
+manifest_version: v2
+include:
+  - root.yml
+  - root_run.yml
 ```
+
+> [!NOTE]
+> the default sigil manifest (from sigil init) contains more fields than the ones provided above.
+> However current implementations of datasources (as of 1.6.0) only require "include" to exist.
 
 Define the root command in `root.yml`:
 
