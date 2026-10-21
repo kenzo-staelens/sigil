@@ -1,0 +1,16 @@
+#!/bin/sh
+# Run the test suite. If it fails, the commit is aborted.
+
+echo "Pre-Commit hook running tests..."
+
+pytest tests
+
+# Capture the exit code
+if [ $? -ne 0 ]; then
+  echo "Tests failed. Commit aborted."
+  echo "(Use 'git commit --no-verify' to bypass, but please don't.)"
+  exit 1
+fi
+
+echo "Tests passed."
+exit 0

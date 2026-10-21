@@ -7,6 +7,7 @@
 - renamed internal routing of subcommands to `_sigil_internal_%s` from raw command name
   to accomodata cases where command group and argument share a name
 - Updated manifest to version 2 format (pre 1.6.0 format still supported with warning)
+- Added pre-commit hooks to repo
 
 ### Fixed
 

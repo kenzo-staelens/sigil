@@ -53,7 +53,14 @@ ecosystem and plugins.
 pip install sigil-cli
 ```
 
-*optionally include argcomplete with `sigil-cli[completion]`*
+> [!TIP]
+> optionally include argcomplete with `sigil-cli[completion]`
+<!---->
+> [!NOTE]
+> for development of this module use `sigil-cli[dev]` or `sigil-cli[dev,completion]` instead.
+>
+> Additionally please include pre commit hooks in your setup.
+> `git config core.hooksPath .githooks` (local tests must pass before commit)
 
 The `init` command generates a project directory with a sample configuration and entrypoint:
 
