@@ -68,5 +68,6 @@ class FilesystemScriptSource(ScriptSource):
         if not spec:
             raise FileNotFoundError(file_path)
         module = importlib.util.module_from_spec(spec)
+        sys.modules[package_name] = module
         cast(Loader, spec.loader).exec_module(module)
         return cast(SubcommandModule, module) # or at least assumed to be by contract

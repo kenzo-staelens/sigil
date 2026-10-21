@@ -8,6 +8,9 @@
   to accomodata cases where command group and argument share a name
 - Updated manifest to version 2 format (pre 1.6.0 format still supported with warning)
 
+### Fixed
+
+- Fixed an error that occured when `__future__.annotations` was combined with dataclasses
 
 ## [1.5.6] - 02/10/2026
 
