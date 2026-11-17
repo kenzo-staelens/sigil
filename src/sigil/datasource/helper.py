@@ -2,8 +2,10 @@ from collections.abc import Iterable
 from pathlib import Path
 
 
-def _expandpath(config_root: Path, path_pattern: Path) -> Iterable[Path]:
-        _has_glob = lambda part: any(ch in part for ch in "*?[")  # noqa: E731
+def _has_glob(part):
+    return any(ch in part for ch in "*?[")
+
+def expandpath(config_root: Path, path_pattern: Path) -> Iterable[Path]:
         p: Path = (config_root/path_pattern).resolve()
         str_p = str(p)
 

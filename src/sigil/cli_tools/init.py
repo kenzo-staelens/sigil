@@ -42,4 +42,5 @@ def create_project(project_name: str, target_dir: str = "."):
 @registers('init', 'generate a minimal sigil')
 def add_sigil_init(command: argparse.ArgumentParser):
     command.add_argument('name', help="project name to create")
-    return lambda args: create_project(args.name)
+    command.add_argument('--dir', default='.', help="project name to create")
+    return lambda args: create_project(args.name, args.dir)

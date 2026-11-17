@@ -12,6 +12,8 @@ _logger = logging.getLogger(__name__)
 # it takes a datasource class to interface with any desired IO
 class Parser:
     def __init__(self, datasource: DataSource | type[DataSource]):
+        # NOTE: allows accepting datasource classes
+        # but leaves option open for user-instantiated objects
         if isinstance(datasource, type):
             datasource: DataSource = datasource()
         self.datasource = datasource

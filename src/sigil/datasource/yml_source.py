@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 
 from .datasource import DataSource
-from .helper import _expandpath
+from .helper import expandpath
 
 _logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class YmlSource(DataSource):
         for line in raw_manifest.get('include', []):
             res_manifest = itertools.chain(
                 res_manifest,
-                _expandpath(root_path, Path(line))
+                expandpath(root_path, Path(line))
             )
         return res_manifest
 

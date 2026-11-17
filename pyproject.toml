@@ -40,8 +40,9 @@ Repository = "https://github.com/kenzo-staelens/sigil"
 Issues = "https://github.com/kenzo-staelens/sigil/issues"
 
 [tool.setuptools]
-script-files = ['_install/sigil']
+# shim to work with windows, instead of
 # sigil = "sigil.__main__:main"
+script-files = ['_install/sigil']
 
 [tool.setuptools.packages.find]
 where = ["src"]

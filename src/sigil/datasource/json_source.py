@@ -6,7 +6,7 @@ import warnings
 from pathlib import Path
 
 from .datasource import DataSource
-from .helper import _expandpath
+from .helper import expandpath
 
 _logger = logging.getLogger(__name__)
 
@@ -14,13 +14,13 @@ _logger = logging.getLogger(__name__)
 # base defines abstract as not-classmethod
 # though instantiation is not a requirement
 # if you don't need instance data, classmethods are fine too
+# NOTE: intentionally not a shared superclass with YmlSource
 class JSONSource(DataSource):
     def read(self, root_path: Path, filename: str) -> dict:
         try:
             target = root_path/filename
             with open(target) as f:
                 return json.load(f)
-                # return yaml.load(f.read(), Loader=yaml.SafeLoader)
         except FileNotFoundError:
             _logger.error(f"file '{target}' not found")
             sys.exit(1)
@@ -45,7 +45,7 @@ class JSONSource(DataSource):
         for line in raw_manifest:
             res_manifest = itertools.chain(
                 res_manifest,
-                _expandpath(root_path, Path(line))
+                expandpath(root_path, Path(line))
             )
         return res_manifest
 
